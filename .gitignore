@@ -1,0 +1,62 @@
+# Data (stored externally)
+data/
+output/
+*.npz
+*.npy
+*.glb
+*.obj
+*.mtl
+*.ply
+*.stl
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.so
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+/tmp/
+
+# Large files
+*.safetensors
+*.ckpt
+*.pt
+*.bin
+*.tar.xz
+
+# Virtual env
+venv/
+.env/
+
+# Blender binary
+blender-*/
+
+# Experiments / outputs
+experiments/
+
+# Test outputs & images
+test_output/
+*.png
+!trellis_seg.png
+
+# Personal notes
+CLAUDE.md
+
+# Project internal
+.codebuddy/
