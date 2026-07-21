@@ -8,7 +8,7 @@
 
 ## Demo Results
 
-👉 [**View Interactive Demo (Segmentation + 3D Mesh)**](https://htmlpreview.github.io/?https://github.com/YixinZhu042/Trellis_Seg/blob/main/demo/index.html)
+👉 [**View Interactive Demo (Segmentation + 3D Mesh)**](https://yixinzhu042.github.io/Trellis_Seg/demo/index.html)
 
 <p align="center">
   <img src="demo/0.png" width="45%">

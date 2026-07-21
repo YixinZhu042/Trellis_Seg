@@ -54,6 +54,16 @@
             --poster-color: transparent;
         }
     </style>
+    <script>
+        // Auto-detect base URL: works both on GitHub Pages and locally
+        const BASE = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('model-viewer').forEach(mv => {
+                const src = mv.getAttribute('data-src');
+                if (src) mv.setAttribute('src', BASE + src);
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>Trellis SegPart - Demo Results</h1>
@@ -62,49 +72,49 @@
         <div class="header">Interactive 3D Mesh</div>
 
         <div class="card"><img src="0.png" alt="seg views"></div>
-        <div class="card"><model-viewer src="0.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+        <div class="card"><model-viewer data-src="0.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
 
         <div class="card"><img src="1_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer src="1.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+        <div class="card"><model-viewer data-src="1.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
 
         <div class="card"><img src="2_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer src="2.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+        <div class="card"><model-viewer data-src="2.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
 
         <div class="card"><img src="3_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer src="3.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+        <div class="card"><model-viewer data-src="3.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
 
         <div class="card"><img src="4_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer src="4.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+        <div class="card"><model-viewer data-src="4.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
 
         <div class="card"><img src="5_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer src="5.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+        <div class="card"><model-viewer data-src="5.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
 
         <div class="card"><img src="6_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer src="6.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+        <div class="card"><model-viewer data-src="6.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
 
         <div class="card"><img src="7_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer src="7.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+        <div class="card"><model-viewer data-src="7.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
 
         <div class="card"><img src="8_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer src="8.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+        <div class="card"><model-viewer data-src="8.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
 
         <div class="card"><img src="9_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer src="9.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+        <div class="card"><model-viewer data-src="9.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
 
         <div class="card"><img src="10_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer src="10.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+        <div class="card"><model-viewer data-src="10.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
 
         <div class="card"><img src="11_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer src="11.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+        <div class="card"><model-viewer data-src="11.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
 
         <div class="card"><img src="12_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer src="12.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+        <div class="card"><model-viewer data-src="12.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
 
         <div class="card"><img src="13_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer src="13.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+        <div class="card"><model-viewer data-src="13.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
 
         <div class="card"><img src="14_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer src="14.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+        <div class="card"><model-viewer data-src="14.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
     </div>
 </body>
 </html>
