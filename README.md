@@ -27,6 +27,8 @@
 
 **2026.07.16: The denoising DiT for segmentation has been available in [HuggingFace](https://huggingface.co/GilgameshYX/Trellis_segPart).**
 
+**2026.07.21: The modified architecture of DiT has been added and the new ckpt has been released in [HuggingFace](https://huggingface.co/GilgameshYX/Trellis_segPart).**
+
 ## Architecture
 
 | Component | Model | Purpose |
