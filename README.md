@@ -6,6 +6,26 @@
 
 3D semantic segmentation generation built on [TRELLIS.2](https://github.com/microsoft/TRELLIS.2). Given a 3D mesh and multi-view segmentation maps, the model generates per-voxel part labels in the TRELLIS latent space using flow matching.
 
+## Demo Results
+
+| Segmentation Views | 3D Mesh |
+|:--:|:--:|
+| ![](demo/0.png) | [Interactive 3D](demo/0.glb) |
+| ![](demo/09ce0bd90d794b02ac95e01e87fdb428_seg_views.png) | [Interactive 3D](demo/09ce0bd90d794b02ac95e01e87fdb428.glb) |
+| ![](demo/1b6ecc74a53f413094356945256ec225_seg_views.png) | [Interactive 3D](demo/1b6ecc74a53f413094356945256ec225.glb) |
+| ![](demo/29492ba72df64954b6b7c45080143cb1_seg_views.png) | [Interactive 3D](demo/29492ba72df64954b6b7c45080143cb1.glb) |
+| ![](demo/34f4db882cb64398887c326771d8a2ce_seg_views.png) | [Interactive 3D](demo/34f4db882cb64398887c326771d8a2ce.glb) |
+| ![](demo/3957dc722ddb44dbbd327780b36a3955_seg_views.png) | [Interactive 3D](demo/3957dc722ddb44dbbd327780b36a3955.glb) |
+| ![](demo/3e237844b1084536bfd0b46da02b9684_seg_views.png) | [Interactive 3D](demo/3e237844b1084536bfd0b46da02b9684.glb) |
+| ![](demo/52c5b1efcded486fa8b51c734da3c9af_seg_views.png) | [Interactive 3D](demo/52c5b1efcded486fa8b51c734da3c9af.glb) |
+| ![](demo/59b83b8c7c5343778b5a662513d9a088_seg_views.png) | [Interactive 3D](demo/59b83b8c7c5343778b5a662513d9a088.glb) |
+| ![](demo/8c264ff20e734c1caa4d23c491ea0abe_seg_views.png) | [Interactive 3D](demo/8c264ff20e734c1caa4d23c491ea0abe.glb) |
+| ![](demo/a15a8056efb0403cbdc8d0d2a7c65f32_seg_views.png) | [Interactive 3D](demo/a15a8056efb0403cbdc8d0d2a7c65f32.glb) |
+| ![](demo/aa4634e8856c494faf8b592c13252d50_seg_views.png) | [Interactive 3D](demo/aa4634e8856c494faf8b592c13252d50.glb) |
+| ![](demo/b155e291c4ab495c922cc47a85e78e80_seg_views.png) | [Interactive 3D](demo/b155e291c4ab495c922cc47a85e78e80.glb) |
+| ![](demo/de65de6e6b4f49e2baf23fb483643601_seg_views.png) | [Interactive 3D](demo/de65de6e6b4f49e2baf23fb483643601.glb) |
+| ![](demo/f847b20b266c4400b216e3cd103f433d_seg_views.png) | [Interactive 3D](demo/f847b20b266c4400b216e3cd103f433d.glb) |
+
 ## News
 
 **2026.7.10: Initial code has been released.**
