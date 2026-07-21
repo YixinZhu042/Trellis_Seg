@@ -57,6 +57,20 @@ test_output/
 !demo/*.png
 !demo/*.glb
 
+# Internal scripts (not for public release)
+scripts/push_dit_to_hf.sh
+scripts/push_vae_to_hf.sh
+scripts/reprocess_with_seg_vae.sh
+scripts/rerun_step1_step2.sh
+scripts/run_step1_multi_node.sh
+scripts/run_step2_multi_node.sh
+scripts/train_seg_dit.sh
+scripts/train_seg_dit_multi_node.sh
+scripts/train_seg_dit_multi_node_launcher.sh
+scripts/train_seg_vae_multi_node_launcher.sh
+scripts/preprocess_and_test.sh
+scripts/test_tex_vae_recon.sh
+
 # Personal notes
 CLAUDE.md
 
