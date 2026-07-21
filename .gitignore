@@ -54,6 +54,8 @@ experiments/
 test_output/
 *.png
 !trellis_seg.png
+!demo/*.png
+!demo/*.glb
 
 # Personal notes
 CLAUDE.md
