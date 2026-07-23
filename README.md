@@ -29,6 +29,16 @@
 
 **2026.07.21: The modified architecture of DiT has been added and the new ckpt has been released in [HuggingFace](https://huggingface.co/GilgameshYX/Trellis_segPart).**
 
+## Pipeline
+
+<p align="center">
+  <img src="trellis_seg_pipeline.png" width="100%">
+</p>
+
+<p align="center">
+  <em>Overview of the Trellis Seg pipeline: multi-view segmentation and shape latents condition a Seg DiT to generate 3D segmentation latents, which are decoded by the Seg VAE into per-part 3D labels.</em>
+</p>
+
 ## Architecture
 
 | Component | Model | Purpose |
