@@ -19,9 +19,11 @@ Channels:
 - out_channels = 32 (velocity for seg_latent)
 - mv_seg latent (32ch) → mv_proj → cond_channels (1024) cross-attn tokens
 
-Fine-tuning from TRELLIS.2 shape DIT:
-- Original shape DIT has in_channels=32; input_layer (32/96→64) shape mismatch is skipped
-  by finetune_from(); mv_proj / mv_pos_embedder are new params (random init).
+Initialization compatibility:
+- The original TRELLIS.2 image+shape-to-texture DiT uses the same 64-input / 32-output
+  architecture; mv_proj adds task-specific parameters. Matching shapes alone do
+  not guarantee matching latent semantics. The released parts64 B model was
+  initialized from the earlier segmentation DiT and uses a frozen VAE v2.
 """
 import sys
 import os

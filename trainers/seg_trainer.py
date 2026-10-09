@@ -166,7 +166,7 @@ class SegFlowMatchingTrainer(FlowMatchingTrainer):
         )
 
         # Randomly drop mv_cond for CFG training (10% drop rate)
-        if mv_cond_feats is not None and self.training:
+        if mv_cond_feats is not None:
             drop_mask = torch.rand(batch_size) < 0.1
             if drop_mask.any():
                 mv_cond_feats = [

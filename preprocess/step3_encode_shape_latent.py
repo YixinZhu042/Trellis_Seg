@@ -32,8 +32,6 @@ import trellis2.models as models
 import trellis2.modules.sparse as sp
 import o_voxel
 
-torch.set_grad_enabled(False)
-
 SHAPE_ENC_PATH = '/path/to/trellis2_ckpts/shape_enc'
 
 

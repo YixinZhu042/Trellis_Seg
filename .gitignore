@@ -76,3 +76,24 @@ CLAUDE.md
 
 # Project internal
 .codebuddy/
+
+# Credentials, local agent state, generated training/evaluation artifacts
+.env
+.env.*
+!.env.example
+.claude/
+.agents/
+.codex/
+.pytest_cache/
+logs/
+results*/
+eval/
+checkpoints/
+runtime_cache/
+releases/
+*.exr
+*.zip
+*.tar.gz
+*.jsonl
+!docs/assets/*.png
+!trellis_seg_pipeline.png

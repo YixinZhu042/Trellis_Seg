@@ -1,0 +1,18 @@
+{
+  "_base": "seg_vae_v2.json",
+  "num_classes": 64,
+  "annotation_policy": "gltf_mesh_local_maskid_v1",
+  "arrow_dir": "/path/to/PartNeXt",
+  "mesh_dir": "/path/to/PartNeXt_mesh/glbs",
+  "annotation_dir": "/path/to/trellisseg_run/data/seg_vae_v2_parts64_annotations",
+  "prepared_dir": "/path/to/trellisseg_run/data/seg_vae_v2_parts64",
+  "model": {"latent_channels": 32},
+  "dataset_split": {
+    "policy": "nested_holdout_sha256_v1",
+    "seed": 20260929,
+    "validation": 128,
+    "test": 128,
+    "quarantine_count": 20
+  },
+  "train": {"steps": 5000, "validation_limit": 128}
+}

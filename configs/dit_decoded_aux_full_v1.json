@@ -1,0 +1,20 @@
+{
+  "base_config": "configs/slat_flow_seg_dit_1_3B_512_bf16.json",
+  "vae_config": "configs/seg_vae_train.json",
+  "data_dir": "data/dit_decoded_full_v1",
+  "encoder": "/path/to/trellis_run/seg_vae_ft_2/ckpts/encoder_step0001000.pt",
+  "decoder": "/path/to/trellis_run/seg_vae_ft_2/ckpts/decoder_step0001000.pt",
+  "dit_ckpt": "/path/to/trellis_seg_run/seg_dit_full_0717/ckpts/denoiser_ema0.9999_step0050000.pt",
+  "seed": 20260922,
+  "lr": 0.000002,
+  "accumulate": 1,
+  "warmup_steps": 500,
+  "aux_warmup_steps": 500,
+  "condition_dropout": 0.1,
+  "sigma_min": 0.00001,
+  "aux_t_max": 0.6,
+  "save_every": 500,
+  "loss_weights": {"segmentation": 0.1, "boundary": 0.02, "reprojection": 0.1},
+  "ema": {"enabled": true, "rate": 0.9999},
+  "teacher_replay": {"probability": 0.1, "weight": 0.1}
+}

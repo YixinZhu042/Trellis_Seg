@@ -1,0 +1,7 @@
+{
+  "_base": "seg_vae_v2.json",
+  "model": {"mode": "voxel"},
+  "train": {"balanced_voxel_ce": false},
+  "loss": {"voxel_ce": 1.0, "voxel_dice": 0.0, "point_ce": 0.0, "surface_ce": 0.0,
+           "surface_dice": 0.0, "reprojection": 0.0, "consistency": 0.0, "boundary": 0.0}
+}

@@ -13,7 +13,7 @@ Correct decode strategy:
     5. z.replace(seg_slat_feats) → Seg VAE decoder → 20ch logits → labels
 
 Usage:
-    python scripts/batch_inference.py --num_samples 10 --output_dir ./batch_results
+    python scripts/batch_inference.py --num_samples 10 --output_dir ./batch_results_0720
 """
 import os
 import sys
@@ -23,6 +23,7 @@ import glob
 import numpy as np
 import torch
 import trimesh
+from PIL import Image
 from tqdm import tqdm
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -44,7 +45,7 @@ torch.set_grad_enabled(False)
 DATA_DIR = '/path/to/data'
 MESH_DIR = '/path/to/PartNeXt_mesh/glbs'
 CONFIG_PATH = os.path.join(PROJECT_DIR, 'configs/slat_flow_seg_dit_1_3B_512_bf16.json')
-DIT_CKPT = './output/seg_dit/ckpts/denoiser_ema0.9999_step0036000.pt'
+DIT_CKPT = './output/seg_dit/ckpts/denoiser_ema0.9999_step0050000.pt'
 SHAPE_ENC_PATH = '/path/to/trellis2_ckpts/shape_enc'
 SEG_VAE_ENC_CKPT = './checkpoints/seg_vae/encoder_step0001000.pt'
 SEG_VAE_DEC_CKPT = './checkpoints/seg_vae/decoder_step0001000.pt'
@@ -72,6 +73,74 @@ def generate_class_colors(num_classes):
     for i in range(20, num_classes):
         colors[i] = BASE_PALETTE[i % 20] * 0.6
     return colors
+
+
+SEG_VIEW_CONFIGS = [
+    {'axis': 2, 'sign': +1, 'up': 1, 'right': 0, 'flip_right': False},  # front
+    {'axis': 0, 'sign': +1, 'up': 1, 'right': 2, 'flip_right': True},   # right
+    {'axis': 2, 'sign': -1, 'up': 1, 'right': 0, 'flip_right': True},   # back
+    {'axis': 0, 'sign': -1, 'up': 1, 'right': 2, 'flip_right': False},  # left
+    {'axis': 1, 'sign': +1, 'up': 2, 'right': 0, 'flip_right': False},  # top
+    {'axis': 1, 'sign': -1, 'up': 2, 'right': 0, 'flip_right': False},  # bottom
+]
+_SEG_GLCTX = None
+
+
+# ============================================================
+# Render stitched 6-view segmentation image
+# ============================================================
+def render_seg_views_rgb(mesh, face_labels, num_classes, resolution=512, device='cuda'):
+    global _SEG_GLCTX
+    import nvdiffrast.torch as dr
+    if _SEG_GLCTX is None:
+        if not str(device).startswith('cuda'):
+            raise ValueError('--save_seg_views requires a CUDA device for nvdiffrast rendering')
+        with torch.cuda.device(device):
+            _SEG_GLCTX = dr.RasterizeCudaContext()
+
+    verts = mesh.vertices.astype(np.float32)
+    bbox_min = verts.min(axis=0)
+    bbox_max = verts.max(axis=0)
+    center = (bbox_min + bbox_max) / 2
+    max_dim = (bbox_max - bbox_min).max()
+    if max_dim > 0:
+        verts = (verts - center) / max_dim * 2
+
+    vertices = torch.from_numpy(verts).to(device)
+    triangles = torch.from_numpy(mesh.faces.astype(np.int32)).to(device)
+    labels = torch.from_numpy(face_labels.astype(np.int64)).to(device).clamp(0, num_classes - 1)
+    palette = torch.from_numpy(generate_class_colors(num_classes)).to(device)
+
+    clips = []
+    for cfg in SEG_VIEW_CONFIGS:
+        px = vertices[:, cfg['right']].clone()
+        py = vertices[:, cfg['up']]
+        depth = vertices[:, cfg['axis']] * cfg['sign']
+        if cfg['flip_right']:
+            px = -px
+        clips.append(torch.stack([px, py, -depth, torch.ones_like(px)], dim=-1))
+
+    positions = torch.stack(clips, dim=0).contiguous()
+    raster, _ = dr.rasterize(_SEG_GLCTX, positions, triangles,
+                             resolution=[resolution, resolution])
+    tri_ids = raster[..., 3].long() - 1
+    images = torch.zeros(6, resolution, resolution, 3, device=device, dtype=torch.float32)
+    hit = tri_ids >= 0
+    images[hit] = palette[labels[tri_ids[hit]]]
+    images = images.flip(1)
+    return (images.clamp(0, 1).cpu().numpy() * 255).astype(np.uint8)
+
+
+def save_stitched_seg_views(mesh, face_labels, num_classes, output_path, resolution=512, device='cuda'):
+    images = render_seg_views_rgb(mesh, face_labels, num_classes, resolution, device)
+    cell_h, cell_w = images.shape[1], images.shape[2]
+    grid = Image.new('RGB', (cell_w * 3, cell_h * 2), (0, 0, 0))
+    for view_idx, image in enumerate(images):
+        col = view_idx % 3
+        row = view_idx // 3
+        grid.paste(Image.fromarray(image), (col * cell_w, row * cell_h))
+    os.makedirs(os.path.dirname(output_path) or '.', exist_ok=True)
+    grid.save(output_path)
 
 
 # ============================================================
@@ -261,6 +330,8 @@ def main():
     parser.add_argument('--config', type=str, default=CONFIG_PATH)
     parser.add_argument('--data_dir', type=str, default=DATA_DIR)
     parser.add_argument('--resolution', type=int, default=512)
+    parser.add_argument('--save_seg_views', action='store_true',
+                        help='Save an extra stitched 3x2 PNG of the predicted 6-view segmentation')
     args = parser.parse_args()
 
     os.makedirs(args.output_dir, exist_ok=True)
@@ -330,7 +401,8 @@ def main():
     for idx, instance in enumerate(tqdm(selected, desc='Inference')):
         try:
             out_path = os.path.join(args.output_dir, f'{instance}.glb')
-            if os.path.exists(out_path):
+            seg_views_path = os.path.join(args.output_dir, f'{instance}_seg_views.png')
+            if os.path.exists(out_path) and (not args.save_seg_views or os.path.exists(seg_views_path)):
                 continue
 
             # --- Find and load mesh ---
@@ -426,6 +498,11 @@ def main():
                 mesh, pred_coords, pred_labels, NUM_CLASSES, args.resolution
             )
             colored_mesh.export(out_path)
+            if args.save_seg_views:
+                save_stitched_seg_views(
+                    mesh, face_labels, NUM_CLASSES, seg_views_path,
+                    resolution=args.resolution, device=device,
+                )
 
             # ==========================================================
             # GT: decode ground-truth seg_latent with same cache

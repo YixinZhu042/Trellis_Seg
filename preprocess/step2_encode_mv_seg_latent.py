@@ -35,8 +35,6 @@ sys.path.insert(0, TRELLIS2_ROOT)
 
 import trellis2.modules.sparse as sp
 
-torch.set_grad_enabled(False)
-
 RESOLUTION = 512  # input voxel grid resolution (VAE downsamples 16x → 32³ latent)
 
 
@@ -113,7 +111,9 @@ def voxelize_foreground(seg_map, view_idx, num_classes):
     if mask.sum() == 0:
         return None, None
 
-    fg_labels = np.clip(flat_labels[mask] - 1, 0, num_classes - 1)  # -1 to restore original label space
+    fg_labels = flat_labels[mask] - 1  # remove the render-only +1 offset exactly once
+    if not np.issubdtype(fg_labels.dtype, np.integer) or np.any(fg_labels < 0) or np.any(fg_labels >= num_classes):
+        raise ValueError(f'Rendered labels must be integers in [1, {num_classes}]')
 
     # One-hot encode (num_classes channels)
     feats = np.zeros((mask.sum(), num_classes), dtype=np.float32)

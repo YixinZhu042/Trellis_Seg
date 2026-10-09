@@ -1,0 +1,1 @@
+{"_base": "seg_vae_v2.json", "model": {"latent_channels": 64}}

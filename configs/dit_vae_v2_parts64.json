@@ -1,0 +1,20 @@
+{
+  "vae_config": "configs/seg_vae_v2_parts64_permute.json",
+  "vae_selection": "/path/to/trellisseg_run/checkpoints/seg_vae_v2_parts64_permute/selection.json",
+  "base_config": "configs/slat_flow_seg_dit_1_3B_512_bf16.json",
+  "dit_init": "/path/to/trellis_seg_run/seg_dit_full_0717/ckpts/denoiser_ema0.9999_step0050000.pt",
+  "shape_dir": "/path/to/trellis_partnext_data/shape_latent",
+  "cache_dir": "/path/to/trellisseg_run/data/dit_vae_v2_parts64",
+  "output_dir": "/path/to/trellisseg_run/checkpoints/dit_vae_v2_parts64",
+  "log_dir": "logs/dit_vae_v2_parts64",
+  "seed": 20260930,
+  "max_tokens": 16384,
+  "train": {
+    "steps": 5000, "lr": 0.00001, "warmup_steps": 500, "accumulate": 1,
+    "condition_dropout": 0.1, "sigma_min": 0.00001,
+    "aux_t_max": 0.6, "aux_warmup_steps": 500,
+    "aux_weights": {"segmentation": 0.1, "boundary": 0.02, "reprojection": 0.1},
+    "query_faces": 2048, "pair_count": 1024, "balanced_fraction": 0.5,
+    "save_every": 500, "validate_every": 500, "ema_rate": 0.9999
+  }
+}

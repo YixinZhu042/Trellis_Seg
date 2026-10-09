@@ -35,8 +35,6 @@ sys.path.insert(0, TRELLIS2_ROOT)
 import trellis2.models as models
 import trellis2.modules.sparse as sp
 
-torch.set_grad_enabled(False)
-
 TEX_ENC_PATH = '/path/to/trellis2_ckpts/tex_enc'
 SEG_VAE_ENC_PATH = './checkpoints/seg_vae/encoder_step0001000.pt'
 
@@ -82,7 +80,7 @@ def _as_face_list(face_indices):
     return face_indices
 
 
-def parse_face_labels(masks_json, num_faces, hierarchy_json=None, max_parts=15):
+def parse_face_labels(masks_json, num_faces, hierarchy_json=None, max_parts=19):
     """
     Parse masks annotation to per-face labels.
     If num_parts > max_parts and hierarchy is available, merge using hierarchy.
@@ -238,8 +236,13 @@ def voxelize_with_labels(mesh, face_labels, resolution=256, num_samples=None):
 
 def labels_to_onehot(labels, num_classes):
     """Convert integer labels → one-hot (N, num_classes) float."""
+    labels = np.asarray(labels)
+    if not np.issubdtype(labels.dtype, np.integer):
+        raise ValueError('Segmentation labels must be integers')
+    if labels.size and (labels.min() < 0 or labels.max() >= num_classes):
+        raise ValueError(f'Labels must be in [0, {num_classes - 1}]')
     feats = np.zeros((len(labels), num_classes), dtype=np.float32)
-    feats[np.arange(len(labels)), np.clip(labels, 0, num_classes - 1)] = 1.0
+    feats[np.arange(len(labels)), labels] = 1.0
     return feats
 
 

@@ -105,15 +105,22 @@ def main():
                 continue
 
             face_labels, num_parts = parse_face_labels(
-                rec['masks'], len(mesh.faces), hierarchy_json=rec.get('hierarchy')
+                rec['masks'], len(mesh.faces), hierarchy_json=rec.get('hierarchy'),
+                max_parts=args.num_classes - 1,
             )
+            if num_parts > args.num_classes - 1:
+                raise ValueError(
+                    f'too many parts after hierarchy merge: {num_parts} > {args.num_classes - 1}')
             coords, labels = voxelize_with_labels(mesh, face_labels, args.resolution)
             if coords is None:
                 fail += 1
                 continue
 
-            # Clamp labels to [0, num_classes-1]
-            labels = np.clip(labels, 0, args.num_classes - 1)
+            # Silent clipping changes the part meaning and can disagree with
+            # seg_views / seg_latent. Invalid labels must fail visibly.
+            if labels.min(initial=0) < 0 or labels.max(initial=0) >= args.num_classes:
+                raise ValueError(
+                    f'label range [{labels.min()}, {labels.max()}] outside [0, {args.num_classes - 1}]')
 
             np.savez_compressed(out_path, coords=coords.astype(np.int32), labels=labels.astype(np.int32))
             success += 1

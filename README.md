@@ -4,9 +4,45 @@
   <img src="trellis_seg.png" width="100%">
 </p>
 
-3D semantic segmentation generation built on [TRELLIS.2](https://github.com/microsoft/TRELLIS.2). Given a 3D mesh and multi-view segmentation maps, the model generates per-voxel part labels in the TRELLIS latent space using flow matching.
+3D part segmentation generation built on [TRELLIS.2](https://github.com/microsoft/TRELLIS.2). Given known mesh geometry and multi-view segmentation conditions, the model generates segmentation latents using flow matching and decodes them into voxel and surface part labels.
+
+## Latest release — 2026-10-09: VAE parts64 + DiT B + small-part optimization
+
+**Start with the [parts64 release guide](docs/parts64_release.md)** for checkpoint loading, data contracts, training methodology, and evaluation limits. The current implementation uses `vae_v2/` and the v2 training/evaluation scripts. These are research pipelines built around audited caches; this release does **not** provide turnkey v2 inference on arbitrary meshes or photographs. `scripts/inference_wild.py` remains a legacy **20-class** workflow.
+
+Use the following pair from [GilgameshYX/Trellis_segPart on Hugging Face](https://huggingface.co/GilgameshYX/Trellis_segPart/tree/a5e92a02738ea0ef741053a863a9cf53b007cf9b/releases/parts64_20261009), pinned to revision **`a5e92a02738ea0ef741053a863a9cf53b007cf9b`**:
+
+| Component | Exact file in the Hugging Face repository |
+| --- | --- |
+| Segmentation VAE v2, regular step 9,500 | `releases/parts64_20261009/vae/regular_step009500.pt` |
+| Segmentation DiT, B EMA step 5,000 | `releases/parts64_20261009/dit/ema_step005000.pt` |
+
+Download the companion configurations, normalization, and release manifest with the weights:
+
+```bash
+hf download GilgameshYX/Trellis_segPart \
+  --revision a5e92a02738ea0ef741053a863a9cf53b007cf9b \
+  --include 'releases/parts64_20261009/*' \
+  --local-dir ./trellis_segpart_models
+```
+
+The **64 label channels include unknown/unannotated channel 0**, leaving at most 63 nonzero part IDs. IDs are **object-local**, not a shared semantic vocabulary. The learned latent still has **32 channels**. VAE v2 includes the encoder, decoder, and learned geometry-aware surface head. The evaluated DiT uses shape features and six-view segmentation latents with **1,029 zero image-placeholder tokens, not real DINO features**.
+
+Both checkpoints were selected on 128 validation objects. VAE training reached step 10,000, but the released and evaluated pair uses **step 9,500**. Do not mix versions: use the matching v2 code, full VAE state, companion configs, geometry template, and training-only normalization together. Legacy 20-class weights, caches, normalization, and inference scripts are incompatible with this pair. Current weights live on Hugging Face, not in Git; training data, generated caches, optimizer states, logs, and runtime prediction artifacts are not shipped with the code release.
+
+| Fixed 128-object development test | Previous paired DiT | B + small-parts DiT |
+| --- | ---: | ---: |
+| Surface mIoU | 83.58% | **85.05%** |
+| Small-part recall | 57.03% | **60.61%** |
+| Hidden-surface mIoU | 71.67% | **73.48%** |
+
+Protocol: Gaussian start, **20 Euler steps, CFG=1 (no classifier-free guidance amplification)**, one fixed seed per object, original IDs, no label matching or postprocessing. Conditions are **GT-derived six-view segmentations and native shape features on known meshes**; these are not results from actual photographs or an external segmentation API. The test objects have already informed development, and historical initialization may have seen some objects: this is development regression evaluation, **not an independent blind test**. Small and numerous parts remain difficult, and some objects regress.
+
+Further reading: [VAE losses](docs/seg_vae_v2_losses_explained.md), [corrected parts64 data and splits](docs/seg_vae_v2_parts64.md), [VAE label-permutation continuation](docs/seg_vae_v2_parts64_permute.md), [frozen-VAE DiT training](docs/dit_vae_v2_parts64.md), [B + small-part methodology](docs/dit_b_smallparts.md), and [October 9 evaluation report](docs/dit_b_smallparts_test_20261009.md). Experiment notes describe their recorded environment; local runtime artifacts linked from those notes are not bundled with this release.
 
 ## Demo Results
+
+The existing interactive demo and images below are retained from the historical release; they are not the 128-object parts64 evaluation above.
 
 👉 [**View Interactive Demo (Segmentation + 3D Mesh)**](https://yixinzhu042.github.io/Trellis_Seg/demo/index.html)
 
@@ -18,6 +54,10 @@
 </p>
 
 ## News
+
+**2026-10-09: Released the paired VAE parts64 v2 and B + small-part DiT checkpoints, with current training/evaluation code. See the [release guide](docs/parts64_release.md).**
+
+The July announcements below describe the historical model family.
 
 **2026.7.10: Initial code has been released.**
 
@@ -39,7 +79,11 @@
   <em>Overview of the Trellis Seg pipeline: multi-view segmentation and shape latents condition a Seg DiT to generate 3D segmentation latents, which are decoded by the Seg VAE into per-part 3D labels.</em>
 </p>
 
-## Architecture
+The diagram is retained as a conceptual overview. For the October 9 release, use the v2 surface decoder and the zero image-placeholder conditioning described above; the implementation details below are historical.
+
+## Legacy architecture (July 2026, 20 classes)
+
+All sections marked **Legacy** document the earlier 20-class code, configurations, data layout, and workflows. Use the [parts64 guide](docs/parts64_release.md) for the current release; changing only checkpoint paths in these examples does not migrate them to v2.
 
 | Component | Model | Purpose |
 |-----------|-------|---------|
@@ -69,7 +113,7 @@ Input: mesh + 6-view segmentation maps
                                           seg_slat (32ch) → Seg VAE decode → per-voxel labels
 ```
 
-## Project Structure
+## Legacy project structure
 
 ```
 trellis_segpart/
@@ -96,7 +140,7 @@ trellis_segpart/
 └── scripts/                           # Launch scripts
 ```
 
-## Prerequisites
+## Legacy prerequisites
 
 - Python 3.10+
 - PyTorch 2.x with CUDA
@@ -104,7 +148,7 @@ trellis_segpart/
 - `o_voxel` (for mesh voxelization in Step 3)
 - Pre-trained TRELLIS.2 checkpoints (Texture VAE, Shape VAE, Shape DIT)
 
-## Data Preprocessing
+## Legacy data preprocessing
 
 The pipeline converts PartNeXt meshes with per-face part annotations into latent representations:
 
@@ -135,7 +179,9 @@ done
 wait
 ```
 
-## Training
+## Legacy training
+
+The `train.py` commands and configurations below describe the historical 20-class training workflow. For current parts64 training, use the v2 entry points and adapted environment described in the [release guide](docs/parts64_release.md#training-methodology-and-split-membership).
 
 ### Stage 1: Seg VAE Fine-tuning
 
@@ -175,11 +221,11 @@ Key details:
 - Elastic memory management for variable token counts
 - Fine-tuned from TRELLIS.2 shape→texture DIT checkpoint
 
-## Inference
+## Legacy inference (20 classes; not parts64 v2)
 
-### In-the-Wild Inference (New Mesh)
+### Historical in-the-wild inference (new mesh)
 
-Full pipeline: mesh → render views → 2D segmentation → 3D generation → colored mesh.
+The historical pipeline was mesh → render views → 2D segmentation → 3D generation → colored mesh. The following commands require the legacy weights, data conventions, and configured environment; they do not implement the current parts64 v2 workflow.
 
 #### Step 1: Render 6 Orthographic Views
 
@@ -235,7 +281,7 @@ python scripts/batch_inference.py \
 
 Outputs `{instance}.glb` (prediction) and `{instance}_gt.glb` (ground truth decode) per sample.
 
-## Configuration
+## Legacy configuration
 
 ### Seg VAE (`configs/seg_vae_train.json`)
 
@@ -260,7 +306,7 @@ Outputs `{instance}.glb` (prediction) and `{instance}_gt.glb` (ground truth deco
 | `max_tokens` | 8192 | Max latent tokens per sample |
 | `lr` | 1e-4 | With linear warmup (1000 steps) |
 
-## Output Data Layout
+## Legacy output data layout
 
 ```
 {data_dir}/

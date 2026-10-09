@@ -115,6 +115,23 @@ def colorize_seg_map(seg_map, num_classes=20):
     return colored
 
 
+def external_seg_ids_to_model_ids(seg_map, num_classes=20):
+    """Map public/API masks to the model channel namespace.
+
+    External masks use 0=background and 1..K=parts. The model reserves channel
+    0 for unlabeled mesh surface and uses channels 1..19 for parts. Training
+    renders are different: they store face_label+1 and preprocessing removes
+    that render-only offset. Wild inference must therefore keep external part
+    IDs unchanged, not subtract one.
+    """
+    values = np.asarray(seg_map)
+    if not np.issubdtype(values.dtype, np.integer) or np.any(values < 0):
+        raise ValueError('External segmentation IDs must be nonnegative integers')
+    if values.max(initial=0) >= num_classes:
+        raise ValueError(f'External part ID {values.max()} exceeds model channel {num_classes - 1}')
+    return values.astype(np.int64, copy=False)
+
+
 class SegSLatDataset(Dataset):
     """
     Base segmentation structured latent dataset.

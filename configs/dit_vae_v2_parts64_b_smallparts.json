@@ -1,0 +1,28 @@
+{
+  "_base": "dit_vae_v2_parts64.json",
+  "dit_init": "/path/to/trellisseg_run/checkpoints/dit_vae_v2_parts64/regular_step004500.pt",
+  "initialization": {
+    "mode": "fork_weights_only",
+    "expected_step": 4500,
+    "expected_kind": "regular"
+  },
+  "output_dir": "/path/to/trellisseg_run/checkpoints/dit_vae_v2_parts64_b_smallparts",
+  "log_dir": "logs/dit_vae_v2_parts64_b_smallparts/train",
+  "train": {
+    "steps": 5000,
+    "lr": 0.00001,
+    "warmup_steps": 500,
+    "ema_rate": 0.999,
+    "label_augmentation": {
+      "policy": "online_synchronized_nonzero_v1",
+      "probability": 0.5,
+      "normalization": "preserve_base_train_statistics"
+    },
+    "object_sampling": {
+      "policy": "part_count_stratified_v1",
+      "bin_probabilities": [0.7, 0.15, 0.15]
+    },
+    "balanced_fraction": 0.75,
+    "surface_macro_fraction": 0.5
+  }
+}

@@ -40,7 +40,7 @@ def _as_face_list(face_indices):
     return face_indices
 
 
-def parse_face_labels(masks_json, num_faces, hierarchy_json=None, max_parts=15):
+def parse_face_labels(masks_json, num_faces, hierarchy_json=None, max_parts=19):
     """
     Parse masks annotation to per-face labels.
     
@@ -383,6 +383,9 @@ def main():
     parser.add_argument('--output_dir', type=str, default='/path/to/data')
     parser.add_argument('--resolution', type=int, default=512)
     parser.add_argument('--num_samples', type=int, default=None)
+    parser.add_argument('--instances', type=str, default=None,
+                        help='Comma-separated model ids or a text file with one model id per line; '
+                             'restricts processing to these instances')
     parser.add_argument('--num_classes', type=int, default=20,
                         help='Segmentation classes; labels are kept in [0, num_classes-1]')
     parser.add_argument('--num_workers', type=int, default=8, help='CPU-mode parallel workers')
@@ -392,6 +395,15 @@ def main():
     args = parser.parse_args()
 
     # Load annotations
+    wanted_ids = None
+    if args.instances:
+        if os.path.exists(args.instances):
+            with open(args.instances, 'r') as f:
+                wanted_ids = {line.strip() for line in f if line.strip()}
+        else:
+            wanted_ids = {x.strip() for x in args.instances.split(',') if x.strip()}
+        print(f'[Rank {args.rank}] restricting to {len(wanted_ids)} requested instances')
+
     arrow_files = sorted(glob(os.path.join(args.arrow_dir, 'data-*.arrow')))
     records = []
     for af in arrow_files:
@@ -403,8 +415,11 @@ def main():
                 except StopIteration:
                     break
                 for i in range(batch.num_rows):
+                    model_id = batch.column('model_id')[i].as_py()
+                    if wanted_ids is not None and model_id not in wanted_ids:
+                        continue
                     records.append({
-                        'model_id': batch.column('model_id')[i].as_py(),
+                        'model_id': model_id,
                         'type_id': batch.column('type_id')[i].as_py(),
                         'masks': batch.column('masks')[i].as_py(),
                         'hierarchy': batch.column('hierarchyList')[i].as_py(),

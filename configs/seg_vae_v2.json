@@ -1,0 +1,21 @@
+{
+  "source_dir": "data/dit_decoded_full_v1",
+  "storage_root": "/path/to/trellisseg_run",
+  "prepared_dir": "/path/to/trellisseg_run/data/seg_vae_v2",
+  "vae_config": "configs/seg_vae_train.json",
+  "encoder_init": "/path/to/trellis_run/seg_vae_ft_2/ckpts/encoder_step0001000.pt",
+  "decoder_init": "/path/to/trellis_run/seg_vae_ft_2/ckpts/decoder_step0001000.pt",
+  "seed": 20260923,
+  "geometry": {"max_voxels": 30000, "area_samples": 100000, "candidates": 32, "neighbors": 8,
+               "normal_min_dot": 0.3, "near_pair_radius_voxels": 8.0},
+  "model": {"mode": "surface", "stages": 5, "latent_channels": 32, "surface_hidden": 64,
+            "initialize_backbone": true, "gradient_checkpointing": true, "conv_algorithm": "explicit_gemm"},
+  "train": {"steps": 10000, "accumulate": 1, "lr": 0.00001, "surface_lr": 0.0001,
+            "weight_decay": 0.0, "warmup_steps": 500, "precision": "bf16", "grad_clip": 1.0,
+            "query_faces": 2048, "pair_count": 1024, "balanced_fraction": 0.5,
+            "balanced_voxel_ce": true, "deterministic_steps": 1000, "kl_warmup_steps": 2000,
+            "kl_weight": 0.00001, "ema_rate": 0.999, "save_every": 500,
+            "validate_every": 500, "validation_limit": 64},
+  "loss": {"voxel_ce": 1.0, "voxel_dice": 0.25, "point_ce": 0.5, "surface_ce": 0.5,
+           "surface_dice": 0.25, "reprojection": 0.25, "consistency": 0.1, "boundary": 0.1}
+}

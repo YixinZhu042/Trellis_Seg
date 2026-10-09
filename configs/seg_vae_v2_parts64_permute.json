@@ -1,0 +1,7 @@
+{
+  "_base": "seg_vae_v2_parts64.json",
+  "train": {
+    "steps": 10000,
+    "label_permutation": "all_nonzero_v1"
+  }
+}
