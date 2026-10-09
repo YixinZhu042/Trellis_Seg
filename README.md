@@ -44,6 +44,8 @@ Further reading: [VAE losses](docs/seg_vae_v2_losses_explained.md), [corrected p
 
 👉 [**Open the comparison: 15 original demo meshes + 3 characters**](https://yixinzhu042.github.io/Trellis_Seg/demo/index.html)
 
+👉 [**Open new-model raw vs geometry-only postprocessed outputs**](https://yixinzhu042.github.io/Trellis_Seg/demo/#sample=character1&mode=post)
+
 The updated HTML provides side-by-side old/new GLBs, synchronized cameras, character filtering, shared input views, static comparisons, and downloads. Only the selected pair is loaded. The original GLBs and [historical page](demo/legacy.html) are preserved.
 
 Both sides are controlled **reruns**: legacy 20-label VAE + DiT EMA step 50,000 versus VAE v2 parts64 regular step 9,500 + B DiT EMA step 5,000. They use identical geometry-only voxel samples, six-view label pixels, and Gaussian noise (seed 42, 20 Euler steps, CFG=1), with each model's trained normalization. No label matching, smoothing, or mesh decimation is applied. These reruns are not a claim of exact reproduction of the archived July predictions.
@@ -58,6 +60,17 @@ The following figures are **agreement with the supplied 2D conditions, not groun
 | Character 3 — fantasy warrior | 70.21% | 76.02% | +5.81 pp |
 
 The character results improve on this condition-agreement measure, but regressions are retained: original demo 08 drops 18.57 pp and demo 10 drops 7.99 pp. New-model character outputs also contain small extra-label fragments, so higher agreement does not establish uniformly cleaner segmentation. See the [demo protocol and limitations](docs/demo_comparison_20261009.md).
+
+### Geometry-only postprocessing
+
+The page now also compares every new-model raw GLB with a separately downloadable postprocessed GLB. One global rule is used for all 18 development examples: merge same-label connected components below **0.05% of total mesh surface area** only when one neighboring label receives at least **80% weighted boundary support**, then apply one synchronous high-confidence boundary vote. Boundary support is weighted by adjacent-face area and normal agreement, reducing influence across sharp creases.
+
+| Development demo cohort | Raw condition mIoU | Postprocessed condition mIoU | Label components |
+| --- | ---: | ---: | ---: |
+| 15 original demos | 92.53% | **93.08%** | 4,195 → 3,127 |
+| 3 characters | 67.17% | **67.36%** | 15,310 → 4,058 |
+
+Across these 18 examples, input-condition mIoU increased for 14, was unchanged for 4, and decreased for none; connected components fell from 19,505 to 7,185 while a mean 0.693% of surface area changed. These are observations on the same development cohort used to choose the single setting, **not held-out generalization results**. The transform itself is geometry-only: it does not read GT or the 2D condition, perform label matching, or replace 3D labels with projected labels. Raw outputs remain available and are never overwritten. See the [postprocessing method, per-object results, and limitations](docs/demo_postprocess_20261009.md).
 
 <p align="center">
   <a href="https://yixinzhu042.github.io/Trellis_Seg/demo/#sample=character1"><img src="demo/comparison/character1/comparison.png" width="100%" alt="Seated monk: shared input condition, old model, new model"></a>

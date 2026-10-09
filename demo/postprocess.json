@@ -1,0 +1,2149 @@
+{
+  "release_date": "2026-10-09",
+  "created_at": "2026-10-09T19:23:39.589320+08:00",
+  "protocol": {
+    "input": "Released parts64 new-model raw face labels from the controlled paired demo",
+    "method": "Geometry-only cleanup: merge same-label connected components below 0.05% total surface area only when one boundary label has at least 80% weighted support; then one synchronous high-confidence boundary vote.",
+    "component_weight": "Shared boundary support weighted by adjacent-face area and normal agreement; sharp creases have low influence.",
+    "condition_used_by_transformation": false,
+    "gt_used": false,
+    "label_matching": false,
+    "projected_label_overwrite": false,
+    "selection_note": "One global setting selected on these 18 development demos, not a held-out benchmark. Candidate had no per-object input-agreement mIoU regression in this cohort.",
+    "metric_note": "Agreement with shared 2D input labels, not independent GT accuracy. Raw outputs remain available."
+  },
+  "settings": {
+    "name": "area_0p05_boundary",
+    "component_area_fraction": 0.0005,
+    "component_dominance": 0.8,
+    "smooth": true
+  },
+  "summary": {
+    "original_demo": {
+      "count": 15,
+      "raw_miou": 0.925320621571226,
+      "post_miou": 0.9307971952735625,
+      "raw_accuracy": 0.9923216570242532,
+      "post_accuracy": 0.9932693086701713,
+      "components_before": 4195,
+      "components_after": 3127,
+      "changed_area_mean": 0.006062942201410363,
+      "improved": 11,
+      "regressed": 0
+    },
+    "character": {
+      "count": 3,
+      "raw_miou": 0.6716559847920074,
+      "post_miou": 0.6735953005175283,
+      "raw_accuracy": 0.8903896427711149,
+      "post_accuracy": 0.8931997795122827,
+      "components_before": 15310,
+      "components_after": 4058,
+      "changed_area_mean": 0.011250942897880725,
+      "improved": 3,
+      "regressed": 0
+    }
+  },
+  "samples": [
+    {
+      "id": "demo00",
+      "title": "Original demo 00 \u2014 game controller",
+      "kind": "original_demo",
+      "faces": 50000,
+      "raw_glb": "comparison/demo00/new.glb",
+      "post_glb": "comparison/demo00/post.glb",
+      "condition_image": "comparison/demo00/inputcondition.png",
+      "comparison_image": "comparison/demo00/post_comparison.png",
+      "source_image": null,
+      "raw": {
+        "pixels": 544838,
+        "pixel_accuracy": 0.96361487267775,
+        "accuracy": 0.96361487267775,
+        "miou": 0.7619823522780147,
+        "part_iou": {
+          "1": 0.9793233366310812,
+          "2": 0.7680617729294335,
+          "3": 0.3574290193346107,
+          "4": 0.7324992552874591,
+          "5": 0.7937415881561238,
+          "6": 0.8771632168306752,
+          "7": 0.8504113687359761,
+          "8": 0.7372292603187577
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          33,
+          40,
+          49,
+          53,
+          57
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 544838,
+        "pixel_accuracy": 0.9638387924483975,
+        "accuracy": 0.9638387924483975,
+        "miou": 0.7636139891065621,
+        "part_iou": {
+          "1": 0.979583213870739,
+          "2": 0.7683727129177592,
+          "3": 0.35828192294261435,
+          "4": 0.7356972586412396,
+          "5": 0.7973701955495617,
+          "6": 0.8782225237449118,
+          "7": 0.8507795100222717,
+          "8": 0.7406045751633987
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          33,
+          49,
+          53
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.0016316368285473892,
+      "accuracy_delta": 0.00022391977064750712,
+      "changed_faces": 318,
+      "changed_area_fraction": 0.0010928107418566096,
+      "components_before": 204,
+      "components_after": 46,
+      "unique_ids_before": 14,
+      "unique_ids_after": 12,
+      "absent_id_area_before": 0.00018380882102064788,
+      "absent_id_area_after": 8.36915205582045e-05,
+      "assets": {
+        "post.glb": {
+          "bytes": 3000980,
+          "sha256": "1f2f8d51a08b2600ed7d8db6c8ef6b6676ff68a29588c23a2417d91fbf5d9b5d"
+        },
+        "post_comparison.png": {
+          "bytes": 27450,
+          "sha256": "62f7559ca2dad4b4f78a98a78f587eebf4f57f37d3405c5fdd5799adbac98983"
+        }
+      },
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ]
+    },
+    {
+      "id": "demo01",
+      "title": "Original demo 01",
+      "kind": "original_demo",
+      "faces": 88,
+      "raw_glb": "comparison/demo01/new.glb",
+      "post_glb": "comparison/demo01/post.glb",
+      "condition_image": "comparison/demo01/inputcondition.png",
+      "comparison_image": "comparison/demo01/post_comparison.png",
+      "source_image": null,
+      "raw": {
+        "pixels": 84852,
+        "pixel_accuracy": 1.0,
+        "accuracy": 1.0,
+        "miou": 1.0,
+        "part_iou": {
+          "2": 1.0
+        },
+        "condition_ids": [
+          2
+        ],
+        "prediction_ids": [
+          2
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 84852,
+        "pixel_accuracy": 1.0,
+        "accuracy": 1.0,
+        "miou": 1.0,
+        "part_iou": {
+          "2": 1.0
+        },
+        "condition_ids": [
+          2
+        ],
+        "prediction_ids": [
+          2
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.0,
+      "accuracy_delta": 0.0,
+      "changed_faces": 0,
+      "changed_area_fraction": 0.0,
+      "components_before": 2,
+      "components_after": 2,
+      "unique_ids_before": 2,
+      "unique_ids_after": 2,
+      "absent_id_area_before": 0.4413630962371826,
+      "absent_id_area_after": 0.4413630962371826,
+      "assets": {
+        "post.glb": {
+          "bytes": 6240,
+          "sha256": "0fb5d2b9045b2aafdc17ee998d75ebd825e4bdc320f56aeaa190af1593b1bc7d"
+        },
+        "post_comparison.png": {
+          "bytes": 10044,
+          "sha256": "73f4a5c46073a01f25a487d11db622add1af707f0276c790a1f0cb3c0b2a9691"
+        }
+      },
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ]
+    },
+    {
+      "id": "demo02",
+      "title": "Original demo 02",
+      "kind": "original_demo",
+      "faces": 13470,
+      "raw_glb": "comparison/demo02/new.glb",
+      "post_glb": "comparison/demo02/post.glb",
+      "condition_image": "comparison/demo02/inputcondition.png",
+      "comparison_image": "comparison/demo02/post_comparison.png",
+      "source_image": null,
+      "raw": {
+        "pixels": 372074,
+        "pixel_accuracy": 0.9940388202346845,
+        "accuracy": 0.9940388202346845,
+        "miou": 0.8463711081777319,
+        "part_iou": {
+          "1": 0.9945888471296677,
+          "2": 0.8592692828146143,
+          "3": 0.9566160520607375,
+          "4": 0.9566160520607375,
+          "5": 0.7791164658634538,
+          "6": 0.9959522363893949,
+          "7": 0.9587305233337162,
+          "8": 0.9722826086956522,
+          "9": 0.9905390134293448,
+          "10": 0.0
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          25,
+          29,
+          53
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 372074,
+        "pixel_accuracy": 0.9945118444180459,
+        "accuracy": 0.9945118444180459,
+        "miou": 0.8632461670964793,
+        "part_iou": {
+          "1": 0.9947369252064441,
+          "2": 0.9407407407407408,
+          "3": 0.9566160520607375,
+          "4": 0.9566160520607375,
+          "5": 0.8594377510040161,
+          "6": 1.0,
+          "7": 0.9605298418896673,
+          "8": 0.9729414961760938,
+          "9": 0.9908428118263551,
+          "10": 0.0
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          29,
+          53
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.01687505891874741,
+      "accuracy_delta": 0.0004730241833613702,
+      "changed_faces": 150,
+      "changed_area_fraction": 0.0014567255060576657,
+      "components_before": 74,
+      "components_after": 34,
+      "unique_ids_before": 14,
+      "unique_ids_after": 12,
+      "absent_id_area_before": 0.00026568397879600525,
+      "absent_id_area_after": 0.00014852294407319278,
+      "assets": {
+        "post.glb": {
+          "bytes": 809176,
+          "sha256": "d9c3378426c617711872e06310b0e52db9008fb8bf0a96b31658d104751796c9"
+        },
+        "post_comparison.png": {
+          "bytes": 17143,
+          "sha256": "8c3f052eca1cb7fa374926f6a405cd1121aeeafdcb083f7e94a4a34e46177be2"
+        }
+      },
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ]
+    },
+    {
+      "id": "demo03",
+      "title": "Original demo 03",
+      "kind": "original_demo",
+      "faces": 21296,
+      "raw_glb": "comparison/demo03/new.glb",
+      "post_glb": "comparison/demo03/post.glb",
+      "condition_image": "comparison/demo03/inputcondition.png",
+      "comparison_image": "comparison/demo03/post_comparison.png",
+      "source_image": null,
+      "raw": {
+        "pixels": 401954,
+        "pixel_accuracy": 0.9880011145553969,
+        "accuracy": 0.9880011145553969,
+        "miou": 0.8364830459827763,
+        "part_iou": {
+          "1": 0.9938116306642376,
+          "2": 0.9902444388588664,
+          "3": 0.9939811712867802,
+          "4": 0.9718341809666678,
+          "5": 0.9474145694108725,
+          "6": 0.9580953306920104,
+          "7": 0.0
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          10,
+          11,
+          22,
+          29,
+          35,
+          38,
+          39,
+          40,
+          41,
+          53,
+          60,
+          62
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 401954,
+        "pixel_accuracy": 0.9903048607552108,
+        "accuracy": 0.9903048607552108,
+        "miou": 0.8401751691959337,
+        "part_iou": {
+          "1": 0.9981144116964493,
+          "2": 0.9959244047900045,
+          "3": 0.9984268843190005,
+          "4": 0.9752664152048925,
+          "5": 0.952598989347821,
+          "6": 0.9608950790133678,
+          "7": 0.0
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          10,
+          29,
+          39,
+          40,
+          41,
+          53,
+          62
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.0036921232131573722,
+      "accuracy_delta": 0.002303746199813994,
+      "changed_faces": 630,
+      "changed_area_fraction": 0.013188517858068875,
+      "components_before": 506,
+      "components_after": 203,
+      "unique_ids_before": 31,
+      "unique_ids_after": 28,
+      "absent_id_area_before": 0.02147022634744644,
+      "absent_id_area_after": 0.020421231165528297,
+      "assets": {
+        "post.glb": {
+          "bytes": 1278740,
+          "sha256": "7a6338b7e893ef94e023d44c716f2460f5ac5656a629eac3563e79f0a4bf6b5f"
+        },
+        "post_comparison.png": {
+          "bytes": 26856,
+          "sha256": "2d016812133b3095cf7d203419a7579be1cca532935a870433f6b021ff19d5fb"
+        }
+      },
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ]
+    },
+    {
+      "id": "demo04",
+      "title": "Original demo 04",
+      "kind": "original_demo",
+      "faces": 7991,
+      "raw_glb": "comparison/demo04/new.glb",
+      "post_glb": "comparison/demo04/post.glb",
+      "condition_image": "comparison/demo04/inputcondition.png",
+      "comparison_image": "comparison/demo04/post_comparison.png",
+      "source_image": null,
+      "raw": {
+        "pixels": 148733,
+        "pixel_accuracy": 0.9937942487544795,
+        "accuracy": 0.9937942487544795,
+        "miou": 0.955276393943512,
+        "part_iou": {
+          "1": 0.9966830914354736,
+          "2": 0.9949957656478559,
+          "3": 0.9678426475179519,
+          "4": 1.0,
+          "5": 0.8168604651162791
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          7,
+          29,
+          33,
+          34,
+          47,
+          48,
+          49,
+          54,
+          57
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 148733,
+        "pixel_accuracy": 0.995414602004935,
+        "accuracy": 0.995414602004935,
+        "miou": 0.9664010732027777,
+        "part_iou": {
+          "1": 0.9982458999108572,
+          "2": 1.0,
+          "3": 0.9721315591262867,
+          "4": 1.0,
+          "5": 0.8616279069767442
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          7,
+          29,
+          33,
+          34,
+          47,
+          48,
+          49,
+          54
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.011124679259265635,
+      "accuracy_delta": 0.0016203532504555085,
+      "changed_faces": 171,
+      "changed_area_fraction": 0.005637742094191348,
+      "components_before": 275,
+      "components_after": 191,
+      "unique_ids_before": 19,
+      "unique_ids_after": 17,
+      "absent_id_area_before": 0.018152883276343346,
+      "absent_id_area_after": 0.01846039667725563,
+      "assets": {
+        "post.glb": {
+          "bytes": 480432,
+          "sha256": "a74e6010c255f488d263415108a882ac29df706c96c7eee03259b145d661429b"
+        },
+        "post_comparison.png": {
+          "bytes": 19620,
+          "sha256": "3b50ac2efb2a4f89e3246d8893a66edaafc4ef7cf14a059c9512aedf75871c8c"
+        }
+      },
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ]
+    },
+    {
+      "id": "demo05",
+      "title": "Original demo 05",
+      "kind": "original_demo",
+      "faces": 1277,
+      "raw_glb": "comparison/demo05/new.glb",
+      "post_glb": "comparison/demo05/post.glb",
+      "condition_image": "comparison/demo05/inputcondition.png",
+      "comparison_image": "comparison/demo05/post_comparison.png",
+      "source_image": null,
+      "raw": {
+        "pixels": 53217,
+        "pixel_accuracy": 0.9984591389969371,
+        "accuracy": 0.9984591389969371,
+        "miou": 0.9984591389969371,
+        "part_iou": {
+          "3": 0.9984591389969371
+        },
+        "condition_ids": [
+          3
+        ],
+        "prediction_ids": [
+          2,
+          3,
+          21,
+          38,
+          49
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 53217,
+        "pixel_accuracy": 0.9984591389969371,
+        "accuracy": 0.9984591389969371,
+        "miou": 0.9984591389969371,
+        "part_iou": {
+          "3": 0.9984591389969371
+        },
+        "condition_ids": [
+          3
+        ],
+        "prediction_ids": [
+          2,
+          3,
+          21,
+          38,
+          49
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.0,
+      "accuracy_delta": 0.0,
+      "changed_faces": 1,
+      "changed_area_fraction": 3.237394895511671e-05,
+      "components_before": 6,
+      "components_after": 5,
+      "unique_ids_before": 5,
+      "unique_ids_after": 5,
+      "absent_id_area_before": 0.5586989521980286,
+      "absent_id_area_after": 0.5586665272712708,
+      "assets": {
+        "post.glb": {
+          "bytes": 77588,
+          "sha256": "34bf5f8ac3a5a605f2176d3147ae22792b2013c47c4de7d29bce091c91bcce5c"
+        },
+        "post_comparison.png": {
+          "bytes": 10862,
+          "sha256": "20bab0f2077610c1d1cdef7dd64e4a57b40d80a50b3ee7e4369039359e34519a"
+        }
+      },
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ]
+    },
+    {
+      "id": "demo06",
+      "title": "Original demo 06",
+      "kind": "original_demo",
+      "faces": 16324,
+      "raw_glb": "comparison/demo06/new.glb",
+      "post_glb": "comparison/demo06/post.glb",
+      "condition_image": "comparison/demo06/inputcondition.png",
+      "comparison_image": "comparison/demo06/post_comparison.png",
+      "source_image": null,
+      "raw": {
+        "pixels": 700375,
+        "pixel_accuracy": 0.9951511690165983,
+        "accuracy": 0.9951511690165983,
+        "miou": 0.9918389548272932,
+        "part_iou": {
+          "1": 0.9959289852869136,
+          "2": 0.995539259584678,
+          "3": 0.9816571790006325,
+          "4": 0.9946524064171123,
+          "5": 1.0,
+          "6": 1.0,
+          "7": 0.9953746564575097,
+          "8": 0.9833828560013983,
+          "9": 0.986842269677242,
+          "10": 0.9850119358474452
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          18,
+          26,
+          29,
+          30,
+          39,
+          45,
+          53
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 700375,
+        "pixel_accuracy": 0.9965261467071211,
+        "accuracy": 0.9965261467071211,
+        "miou": 0.9958033992552704,
+        "part_iou": {
+          "1": 1.0,
+          "2": 0.9978009337573585,
+          "3": 1.0,
+          "4": 1.0,
+          "5": 1.0,
+          "6": 1.0,
+          "7": 0.9974786008051039,
+          "8": 0.9887533739878036,
+          "9": 0.9889961486520282,
+          "10": 0.9850049353504099
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          18,
+          26,
+          29,
+          30,
+          53
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.003964444427977165,
+      "accuracy_delta": 0.0013749776905228606,
+      "changed_faces": 651,
+      "changed_area_fraction": 0.008144210591867877,
+      "components_before": 212,
+      "components_after": 63,
+      "unique_ids_before": 19,
+      "unique_ids_after": 16,
+      "absent_id_area_before": 0.003957058768719435,
+      "absent_id_area_after": 0.0026618719566613436,
+      "assets": {
+        "post.glb": {
+          "bytes": 980416,
+          "sha256": "42d62f9e5b52c56c033e41888034a95077e01ab9e1d7ec2b9dbff1e2365de181"
+        },
+        "post_comparison.png": {
+          "bytes": 17818,
+          "sha256": "5769623b0ba3b65cb7fbef9f7836bc31aaf04e775d0bd2a8163bc615433e027c"
+        }
+      },
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ]
+    },
+    {
+      "id": "demo07",
+      "title": "Original demo 07",
+      "kind": "original_demo",
+      "faces": 7481,
+      "raw_glb": "comparison/demo07/new.glb",
+      "post_glb": "comparison/demo07/post.glb",
+      "condition_image": "comparison/demo07/inputcondition.png",
+      "comparison_image": "comparison/demo07/post_comparison.png",
+      "source_image": null,
+      "raw": {
+        "pixels": 525017,
+        "pixel_accuracy": 0.9976057918124556,
+        "accuracy": 0.9976057918124556,
+        "miou": 0.9186651479941995,
+        "part_iou": {
+          "1": 0.9979303880679637,
+          "2": 0.9982385518561196,
+          "3": 0.9893451143451143,
+          "4": 0.9768039031070787,
+          "5": 0.9940736119775421,
+          "6": 0.9952549925730318,
+          "7": 0.9957761351636748,
+          "8": 0.9949292987591211,
+          "9": 0.9951698960966021,
+          "10": 0.9930856897620524,
+          "11": 0.9942979857819905,
+          "12": 0.9956283343212804,
+          "13": 0.022113022113022112
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          29,
+          30,
+          33,
+          34,
+          41,
+          43,
+          48,
+          51,
+          60
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 525017,
+        "pixel_accuracy": 0.9989028926682374,
+        "accuracy": 0.9989028926682374,
+        "miou": 0.9227426545737558,
+        "part_iou": {
+          "1": 0.9997986560289935,
+          "2": 0.9996649372011087,
+          "3": 0.9942568743473721,
+          "4": 0.9986912136811796,
+          "5": 0.9946350592638802,
+          "6": 0.997313827589057,
+          "7": 0.9957142857142857,
+          "8": 0.9962846763540291,
+          "9": 1.0,
+          "10": 1.0,
+          "11": 0.9994789340479381,
+          "12": 0.9977030231179609,
+          "13": 0.022113022113022112
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          29,
+          33,
+          34,
+          41,
+          43,
+          48,
+          51,
+          60
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.0040775065795563,
+      "accuracy_delta": 0.0012971008557818298,
+      "changed_faces": 200,
+      "changed_area_fraction": 0.008212186744618552,
+      "components_before": 291,
+      "components_after": 200,
+      "unique_ids_before": 24,
+      "unique_ids_after": 22,
+      "absent_id_area_before": 0.0013623721897602081,
+      "absent_id_area_after": 0.0009809979237616062,
+      "assets": {
+        "post.glb": {
+          "bytes": 449832,
+          "sha256": "8833011ef7583803f8dc06cf99c50c3b969449ac59384d522a2286809f6c2113"
+        },
+        "post_comparison.png": {
+          "bytes": 17998,
+          "sha256": "ef45d868b3d4f118e6bb0c614efb4e9824b832570a992cc422e6bc8f32c02c73"
+        }
+      },
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ]
+    },
+    {
+      "id": "demo08",
+      "title": "Original demo 08",
+      "kind": "original_demo",
+      "faces": 35508,
+      "raw_glb": "comparison/demo08/new.glb",
+      "post_glb": "comparison/demo08/post.glb",
+      "condition_image": "comparison/demo08/inputcondition.png",
+      "comparison_image": "comparison/demo08/post_comparison.png",
+      "source_image": null,
+      "raw": {
+        "pixels": 144777,
+        "pixel_accuracy": 0.9831395870891094,
+        "accuracy": 0.9831395870891094,
+        "miou": 0.7691715143926359,
+        "part_iou": {
+          "1": 0.9969270804495876,
+          "2": 0.9878959567344836,
+          "3": 0.9836418424451141,
+          "4": 0.9783269961977187,
+          "5": 0.9827558158451277,
+          "6": 0.9961266803372066,
+          "7": 0.9995240973928254,
+          "8": 0.9128540305010894,
+          "9": 0.0,
+          "10": 0.6228341584158416,
+          "11": 0.0
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          10,
+          11,
+          12,
+          29,
+          30,
+          40,
+          45,
+          53
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 144777,
+        "pixel_accuracy": 0.9847144228710362,
+        "accuracy": 0.9847144228710362,
+        "miou": 0.7809360440563105,
+        "part_iou": {
+          "1": 0.9969270804495876,
+          "2": 0.9971539456662355,
+          "3": 1.0,
+          "4": 0.9851711026615969,
+          "5": 1.0,
+          "6": 1.0,
+          "7": 1.0,
+          "8": 0.9880174291938998,
+          "9": 0.0,
+          "10": 0.6230269266480966,
+          "11": 0.0
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          10,
+          11,
+          40,
+          45
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.011764529663674583,
+      "accuracy_delta": 0.0015748357819267422,
+      "changed_faces": 467,
+      "changed_area_fraction": 0.004600928152062539,
+      "components_before": 166,
+      "components_after": 100,
+      "unique_ids_before": 20,
+      "unique_ids_after": 15,
+      "absent_id_area_before": 0.04962654039263725,
+      "absent_id_area_after": 0.04890225827693939,
+      "assets": {
+        "post.glb": {
+          "bytes": 2131464,
+          "sha256": "698d07f52851ad9e7a8732566f1d0ff42ce0dafb4e1f7de75535c11cc3d3b48e"
+        },
+        "post_comparison.png": {
+          "bytes": 21071,
+          "sha256": "faf93cbe66f36bd979e0f2f436cfa6faf0db73dd9d89f082e36c3c3f97e88308"
+        }
+      },
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ]
+    },
+    {
+      "id": "demo09",
+      "title": "Original demo 09",
+      "kind": "original_demo",
+      "faces": 2360,
+      "raw_glb": "comparison/demo09/new.glb",
+      "post_glb": "comparison/demo09/post.glb",
+      "condition_image": "comparison/demo09/inputcondition.png",
+      "comparison_image": "comparison/demo09/post_comparison.png",
+      "source_image": null,
+      "raw": {
+        "pixels": 77916,
+        "pixel_accuracy": 0.995880178653935,
+        "accuracy": 0.995880178653935,
+        "miou": 0.9067381513284541,
+        "part_iou": {
+          "1": 1.0,
+          "2": 0.9848573092603378,
+          "3": 1.0,
+          "4": 0.9809012607664461,
+          "5": 0.7554585152838428,
+          "6": 0.7192118226600985
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          15,
+          61
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 77916,
+        "pixel_accuracy": 0.995507982956004,
+        "accuracy": 0.995507982956004,
+        "miou": 0.9267283629825126,
+        "part_iou": {
+          "1": 1.0,
+          "2": 0.9804892253931276,
+          "3": 1.0,
+          "4": 0.9791549996888806,
+          "5": 0.8421052631578947,
+          "6": 0.7586206896551724
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          15,
+          61
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.019990211654058454,
+      "accuracy_delta": -0.00037219569793101037,
+      "changed_faces": 25,
+      "changed_area_fraction": 0.004833680334329908,
+      "components_before": 29,
+      "components_after": 18,
+      "unique_ids_before": 8,
+      "unique_ids_after": 8,
+      "absent_id_area_before": 0.00019062453065998852,
+      "absent_id_area_after": 0.00019062453065998852,
+      "assets": {
+        "post.glb": {
+          "bytes": 142572,
+          "sha256": "223493857c5cfa1657a36c864462a077de9ccd4564eb0db5acf04ca0266d7e7f"
+        },
+        "post_comparison.png": {
+          "bytes": 9555,
+          "sha256": "3cbf0c840bb7f1e3a961c9641cd34719bb6874a665213c4317c8850b0705332c"
+        }
+      },
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ]
+    },
+    {
+      "id": "demo10",
+      "title": "Original demo 10",
+      "kind": "original_demo",
+      "faces": 29939,
+      "raw_glb": "comparison/demo10/new.glb",
+      "post_glb": "comparison/demo10/post.glb",
+      "condition_image": "comparison/demo10/inputcondition.png",
+      "comparison_image": "comparison/demo10/post_comparison.png",
+      "source_image": null,
+      "raw": {
+        "pixels": 241675,
+        "pixel_accuracy": 0.9869783800558601,
+        "accuracy": 0.9869783800558601,
+        "miou": 0.9181687793208569,
+        "part_iou": {
+          "1": 0.6429530201342282,
+          "2": 0.9895713463751439,
+          "3": 0.9913223140495868,
+          "4": 0.981463619207381,
+          "5": 0.9855335968379446
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          7,
+          8,
+          18,
+          21,
+          25,
+          26,
+          28,
+          29,
+          32,
+          33,
+          35,
+          36,
+          41,
+          47,
+          49,
+          58,
+          62,
+          63
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 241675,
+        "pixel_accuracy": 0.987499741388228,
+        "accuracy": 0.987499741388228,
+        "miou": 0.9187564717086193,
+        "part_iou": {
+          "1": 0.6426654740608229,
+          "2": 0.9897305852307471,
+          "3": 0.9915686801264698,
+          "4": 0.9841293135980544,
+          "5": 0.9856883055270025
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          7,
+          8,
+          14,
+          18,
+          25,
+          26,
+          29,
+          32,
+          36,
+          41,
+          49,
+          58,
+          62,
+          63
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.0005876923877623508,
+      "accuracy_delta": 0.0005213613323679089,
+      "changed_faces": 173,
+      "changed_area_fraction": 0.003960013715607053,
+      "components_before": 2275,
+      "components_after": 2202,
+      "unique_ids_before": 33,
+      "unique_ids_after": 30,
+      "absent_id_area_before": 0.1338372826576233,
+      "absent_id_area_after": 0.13288013637065887,
+      "assets": {
+        "post.glb": {
+          "bytes": 1797320,
+          "sha256": "7f5822f9ae14f1fb73d0ad7aec93d6a5791f37d337b2c1d236654ead8604f1b1"
+        },
+        "post_comparison.png": {
+          "bytes": 31475,
+          "sha256": "b30bd6dea762c287f5e266df7553ebdc59ccd6ddb4aaabeeccf3a7d08fff8c48"
+        }
+      },
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ]
+    },
+    {
+      "id": "demo11",
+      "title": "Original demo 11",
+      "kind": "original_demo",
+      "faces": 3280,
+      "raw_glb": "comparison/demo11/new.glb",
+      "post_glb": "comparison/demo11/post.glb",
+      "condition_image": "comparison/demo11/inputcondition.png",
+      "comparison_image": "comparison/demo11/post_comparison.png",
+      "source_image": null,
+      "raw": {
+        "pixels": 111026,
+        "pixel_accuracy": 1.0,
+        "accuracy": 1.0,
+        "miou": 1.0,
+        "part_iou": {
+          "2": 1.0
+        },
+        "condition_ids": [
+          2
+        ],
+        "prediction_ids": [
+          2
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 111026,
+        "pixel_accuracy": 1.0,
+        "accuracy": 1.0,
+        "miou": 1.0,
+        "part_iou": {
+          "2": 1.0
+        },
+        "condition_ids": [
+          2
+        ],
+        "prediction_ids": [
+          2
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.0,
+      "accuracy_delta": 0.0,
+      "changed_faces": 14,
+      "changed_area_fraction": 0.003442423725457979,
+      "components_before": 13,
+      "components_after": 4,
+      "unique_ids_before": 4,
+      "unique_ids_after": 3,
+      "absent_id_area_before": 0.8913043141365051,
+      "absent_id_area_after": 0.8913043141365051,
+      "assets": {
+        "post.glb": {
+          "bytes": 197768,
+          "sha256": "015cd1fe628cd5698db0725ed8c17dfce3666a33df8fbc6680a20ffc71dfe093"
+        },
+        "post_comparison.png": {
+          "bytes": 18744,
+          "sha256": "391374cb7c71c73b4251451c552c195100f54470d660a496885c3e4284552128"
+        }
+      },
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ]
+    },
+    {
+      "id": "demo12",
+      "title": "Original demo 12",
+      "kind": "original_demo",
+      "faces": 3320,
+      "raw_glb": "comparison/demo12/new.glb",
+      "post_glb": "comparison/demo12/post.glb",
+      "condition_image": "comparison/demo12/inputcondition.png",
+      "comparison_image": "comparison/demo12/post_comparison.png",
+      "source_image": null,
+      "raw": {
+        "pixels": 22272,
+        "pixel_accuracy": 0.9942528735632183,
+        "accuracy": 0.9942528735632183,
+        "miou": 0.9894976586145828,
+        "part_iou": {
+          "1": 0.9770841564598973,
+          "2": 0.9914088193838513,
+          "3": 1.0
+        },
+        "condition_ids": [
+          1,
+          2,
+          3
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          32,
+          58
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 22272,
+        "pixel_accuracy": 0.9944324712643678,
+        "accuracy": 0.9944324712643678,
+        "miou": 0.9901026937577196,
+        "part_iou": {
+          "1": 0.9786307874950534,
+          "2": 0.9916772937781059,
+          "3": 1.0
+        },
+        "condition_ids": [
+          1,
+          2,
+          3
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          32,
+          58
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.0006050351431368117,
+      "accuracy_delta": 0.00017959770114950313,
+      "changed_faces": 72,
+      "changed_area_fraction": 0.009773838532325194,
+      "components_before": 75,
+      "components_after": 37,
+      "unique_ids_before": 8,
+      "unique_ids_after": 7,
+      "absent_id_area_before": 0.7839740514755249,
+      "absent_id_area_after": 0.7840976715087891,
+      "assets": {
+        "post.glb": {
+          "bytes": 200172,
+          "sha256": "7816a5b708a121fe0644b0f6339f04ced3d888f46d472588832c4b371ee2ad1b"
+        },
+        "post_comparison.png": {
+          "bytes": 15881,
+          "sha256": "ed00efae81a06f297cbdb470e814257e3cf1a5dfd976a7f3ee1978756ec59aac"
+        }
+      },
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ]
+    },
+    {
+      "id": "demo13",
+      "title": "Original demo 13",
+      "kind": "original_demo",
+      "faces": 1072,
+      "raw_glb": "comparison/demo13/new.glb",
+      "post_glb": "comparison/demo13/post.glb",
+      "condition_image": "comparison/demo13/inputcondition.png",
+      "comparison_image": "comparison/demo13/post_comparison.png",
+      "source_image": null,
+      "raw": {
+        "pixels": 68833,
+        "pixel_accuracy": 1.0,
+        "accuracy": 1.0,
+        "miou": 1.0,
+        "part_iou": {
+          "2": 1.0
+        },
+        "condition_ids": [
+          2
+        ],
+        "prediction_ids": [
+          2
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 68833,
+        "pixel_accuracy": 1.0,
+        "accuracy": 1.0,
+        "miou": 1.0,
+        "part_iou": {
+          "2": 1.0
+        },
+        "condition_ids": [
+          2
+        ],
+        "prediction_ids": [
+          2
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.0,
+      "accuracy_delta": 0.0,
+      "changed_faces": 41,
+      "changed_area_fraction": 0.009484246982656127,
+      "components_before": 42,
+      "components_after": 13,
+      "unique_ids_before": 6,
+      "unique_ids_after": 5,
+      "absent_id_area_before": 0.4271680414676666,
+      "absent_id_area_after": 0.42729267477989197,
+      "assets": {
+        "post.glb": {
+          "bytes": 65292,
+          "sha256": "450a66c76655bce1ea40077be19d73c8ba7ccf856799b3e563e8ff5996c7ef28"
+        },
+        "post_comparison.png": {
+          "bytes": 14059,
+          "sha256": "2baddaf57d7c35f6c9d459cab965e478e03468a0b068047d62270ea03e515b36"
+        }
+      },
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ]
+    },
+    {
+      "id": "demo14",
+      "title": "Original demo 14",
+      "kind": "original_demo",
+      "faces": 992,
+      "raw_glb": "comparison/demo14/new.glb",
+      "post_glb": "comparison/demo14/post.glb",
+      "condition_image": "comparison/demo14/inputcondition.png",
+      "comparison_image": "comparison/demo14/post_comparison.png",
+      "source_image": null,
+      "raw": {
+        "pixels": 140692,
+        "pixel_accuracy": 0.9939086799533733,
+        "accuracy": 0.9939086799533733,
+        "miou": 0.9871570777113954,
+        "part_iou": {
+          "1": 0.9873924397448521,
+          "2": 1.0,
+          "3": 0.987073937079903,
+          "4": 0.9880808325266215,
+          "5": 0.98,
+          "6": 0.980395256916996
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          57
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 140692,
+        "pixel_accuracy": 0.9989267335740483,
+        "accuracy": 0.9989267335740483,
+        "miou": 0.9949927651705607,
+        "part_iou": {
+          "1": 1.0,
+          "2": 1.0,
+          "3": 0.9999197753710389,
+          "4": 0.9910773899848255,
+          "5": 0.9795918367346939,
+          "6": 0.9993675889328063
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.007835687459165297,
+      "accuracy_delta": 0.005018053620674978,
+      "changed_faces": 17,
+      "changed_area_fraction": 0.017084434093100606,
+      "components_before": 25,
+      "components_after": 9,
+      "unique_ids_before": 9,
+      "unique_ids_after": 6,
+      "absent_id_area_before": 0.004468632396310568,
+      "absent_id_area_after": 0.0,
+      "assets": {
+        "post.glb": {
+          "bytes": 60488,
+          "sha256": "031cae9bba38c81a1843924eb70d604288f2cd781286b9bf031fc27017005ee4"
+        },
+        "post_comparison.png": {
+          "bytes": 19951,
+          "sha256": "dcd1908973c7b32f8d96d40d05491d990f157e889f18c8a6dbbc79167c561da0"
+        }
+      },
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ]
+    },
+    {
+      "id": "character1",
+      "title": "Character 1 \u2014 seated monk",
+      "kind": "character",
+      "faces": 490563,
+      "raw_glb": "comparison/character1/new.glb",
+      "post_glb": "comparison/character1/post.glb",
+      "condition_image": "comparison/character1/inputcondition.png",
+      "comparison_image": "comparison/character1/post_comparison.png",
+      "source_image": "comparison/character1/source.png",
+      "raw": {
+        "pixels": 917417,
+        "pixel_accuracy": 0.8896227124633618,
+        "accuracy": 0.8896227124633618,
+        "miou": 0.6514860902907911,
+        "part_iou": {
+          "1": 0.8646952017934769,
+          "2": 0.868967541833127,
+          "3": 0.9198540248438487,
+          "4": 0.43488519208740106,
+          "5": 0.7151905063502116,
+          "6": 0.4414715719063545,
+          "7": 0.46358732299393124,
+          "8": 0.5032373605179776
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          10,
+          11,
+          13,
+          15,
+          18,
+          21,
+          22,
+          24,
+          25,
+          26,
+          28,
+          29,
+          33,
+          35,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          47,
+          48,
+          52,
+          53,
+          55,
+          56,
+          57,
+          60,
+          62
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 917417,
+        "pixel_accuracy": 0.890771590236501,
+        "accuracy": 0.890771590236501,
+        "miou": 0.6550973747559419,
+        "part_iou": {
+          "1": 0.8640880560356591,
+          "2": 0.8731406226038951,
+          "3": 0.9282233091702442,
+          "4": 0.42663811563169163,
+          "5": 0.7188772445097124,
+          "6": 0.4491566265060241,
+          "7": 0.47588094423537464,
+          "8": 0.5047740793549339
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          10,
+          11,
+          13,
+          15,
+          18,
+          21,
+          22,
+          24,
+          25,
+          28,
+          29,
+          33,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          47,
+          48,
+          52,
+          53,
+          55,
+          56,
+          57,
+          60,
+          62
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.003611284465150799,
+      "accuracy_delta": 0.001148877773139212,
+      "changed_faces": 6166,
+      "changed_area_fraction": 0.005472472356213481,
+      "components_before": 3084,
+      "components_after": 732,
+      "unique_ids_before": 45,
+      "unique_ids_after": 43,
+      "absent_id_area_before": 0.004547325428575277,
+      "absent_id_area_after": 0.003366635413840413,
+      "assets": {
+        "post.glb": {
+          "bytes": 29434788,
+          "sha256": "c38ab495887077278998f18c1f6690c65a3c6f58d9889477e9236d10af3d11ab"
+        },
+        "post_comparison.png": {
+          "bytes": 59092,
+          "sha256": "e5642e51e0ab6c071fb05ad5d8c93a32188ca7c99e595a4d3af51122c7955705"
+        }
+      },
+      "notes": [
+        "External2D API conditions shared by both models; no ground-truth segmentation.",
+        "Original static mesh kept at full face count; no decimation."
+      ]
+    },
+    {
+      "id": "character2",
+      "title": "Character 2 \u2014 armored bear",
+      "kind": "character",
+      "faces": 500000,
+      "raw_glb": "comparison/character2/new.glb",
+      "post_glb": "comparison/character2/post.glb",
+      "condition_image": "comparison/character2/inputcondition.png",
+      "comparison_image": "comparison/character2/post_comparison.png",
+      "source_image": "comparison/character2/source.png",
+      "raw": {
+        "pixels": 514692,
+        "pixel_accuracy": 0.8800000777163819,
+        "accuracy": 0.8800000777163819,
+        "miou": 0.6032782238162869,
+        "part_iou": {
+          "1": 0.918335317675073,
+          "2": 0.7058355629474293,
+          "3": 0.7016296420958151,
+          "4": 0.5618859215298384,
+          "5": 0.27861194527861194,
+          "6": 0.45337095337095334
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          18,
+          19,
+          21,
+          24,
+          25,
+          28,
+          29,
+          33,
+          34,
+          38,
+          40,
+          41,
+          42,
+          43,
+          46,
+          48,
+          53,
+          54,
+          55,
+          56,
+          57,
+          60,
+          61,
+          62,
+          63
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 514692,
+        "pixel_accuracy": 0.8859745245700341,
+        "accuracy": 0.8859745245700341,
+        "miou": 0.6037379482611774,
+        "part_iou": {
+          "1": 0.926882131092758,
+          "2": 0.7183090545558412,
+          "3": 0.7085830299635957,
+          "4": 0.5295952222959522,
+          "5": 0.28421966153994505,
+          "6": 0.4548385901189726
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          19,
+          21,
+          24,
+          25,
+          28,
+          29,
+          33,
+          34,
+          38,
+          40,
+          41,
+          42,
+          43,
+          46,
+          48,
+          53,
+          54,
+          55,
+          56,
+          57,
+          60,
+          61,
+          62
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.000459724444890508,
+      "accuracy_delta": 0.005974446853652227,
+      "changed_faces": 16228,
+      "changed_area_fraction": 0.019383817193083307,
+      "components_before": 6146,
+      "components_after": 1433,
+      "unique_ids_before": 44,
+      "unique_ids_after": 42,
+      "absent_id_area_before": 0.014685142785310745,
+      "absent_id_area_after": 0.011553500778973103,
+      "assets": {
+        "post.glb": {
+          "bytes": 30001008,
+          "sha256": "a97697c43928f96f99616e2b7e9c5a017a9b7a39a5aba252d5a1d4e2f3911121"
+        },
+        "post_comparison.png": {
+          "bytes": 36261,
+          "sha256": "6fedb1e17e886e0ce63ea012996b71f69107e1b99fd5fc3e5be770c5e2e70d64"
+        }
+      },
+      "notes": [
+        "External2D API conditions shared by both models; no ground-truth segmentation.",
+        "Original static mesh kept at full face count; no decimation."
+      ]
+    },
+    {
+      "id": "character3",
+      "title": "Character 3 \u2014 fantasy warrior",
+      "kind": "character",
+      "faces": 500000,
+      "raw_glb": "comparison/character3/new.glb",
+      "post_glb": "comparison/character3/post.glb",
+      "condition_image": "comparison/character3/inputcondition.png",
+      "comparison_image": "comparison/character3/post_comparison.png",
+      "source_image": "comparison/character3/source.png",
+      "raw": {
+        "pixels": 402422,
+        "pixel_accuracy": 0.9015461381336011,
+        "accuracy": 0.9015461381336011,
+        "miou": 0.7602036402689442,
+        "part_iou": {
+          "1": 0.8827686792973086,
+          "2": 0.7908916817205635,
+          "3": 0.5588014277662972,
+          "4": 0.8217377860235003,
+          "5": 0.6186328478851648,
+          "6": 0.8883894189208306
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          9,
+          12,
+          13,
+          16,
+          17,
+          18,
+          19,
+          21,
+          22,
+          24,
+          25,
+          26,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          38,
+          40,
+          41,
+          42,
+          43,
+          45,
+          46,
+          48,
+          50,
+          53,
+          54,
+          56,
+          57,
+          60,
+          61,
+          62,
+          63
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "post": {
+        "pixels": 402422,
+        "pixel_accuracy": 0.902853223730313,
+        "accuracy": 0.902853223730313,
+        "miou": 0.7619505785354654,
+        "part_iou": {
+          "1": 0.8840243043708667,
+          "2": 0.7928439101147982,
+          "3": 0.5638247539742619,
+          "4": 0.8230828814872192,
+          "5": 0.6178811154937375,
+          "6": 0.8900465057719092
+        },
+        "condition_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "prediction_ids": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          9,
+          12,
+          13,
+          16,
+          17,
+          18,
+          19,
+          21,
+          22,
+          24,
+          25,
+          26,
+          28,
+          29,
+          30,
+          33,
+          34,
+          35,
+          38,
+          40,
+          41,
+          42,
+          43,
+          45,
+          46,
+          48,
+          50,
+          53,
+          56,
+          60,
+          61,
+          62,
+          63
+        ],
+        "miou_policy": "IDs present in valid input-condition pixels",
+        "condition_pixels_without_face": 0
+      },
+      "miou_delta": 0.0017469382665212807,
+      "accuracy_delta": 0.0013070855967118877,
+      "changed_faces": 9001,
+      "changed_area_fraction": 0.008896539144345387,
+      "components_before": 6080,
+      "components_after": 1893,
+      "unique_ids_before": 53,
+      "unique_ids_after": 53,
+      "absent_id_area_before": 0.023282382637262344,
+      "absent_id_area_after": 0.021094240248203278,
+      "assets": {
+        "post.glb": {
+          "bytes": 30000996,
+          "sha256": "9088cf123ea762ad80abd0b14f8f744709ebadef47f97a117f7a841c0d3b2021"
+        },
+        "post_comparison.png": {
+          "bytes": 52942,
+          "sha256": "37ef0ee4a83309a986849c3662c8423ad8b315afc9cf6711c21c5a89f2256d9e"
+        }
+      },
+      "notes": [
+        "External2D API conditions shared by both models; no ground-truth segmentation.",
+        "Original static mesh kept at full face count; no decimation."
+      ]
+    }
+  ],
+  "asset_bytes": 101542094
+}

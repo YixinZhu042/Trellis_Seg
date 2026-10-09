@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#101a2d">
-  <meta name="description" content="Compare controlled old and new Trellis SegPart reruns on the original demo meshes and three characters. Inspect the 3D outputs, shared 2D conditions, and input agreement.">
-  <title>Trellis SegPart · Model comparison</title>
+  <meta name="description" content="Compare controlled Trellis SegPart model generations and inspect raw versus geometry-only postprocessed outputs on 15 demo meshes and three characters.">
+  <title>Trellis SegPart · Model and postprocessing comparison</title>
   <link rel="stylesheet" href="style.css">
   <script src="app.js" defer></script>
 </head>
@@ -13,11 +13,11 @@
   <a class="skip-link" href="#comparison">Skip to comparison</a>
   <header class="site-header">
     <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>Trellis <strong>SegPart</strong></span></div>
-    <nav aria-label="Release resources"><a href="comparison.json">Comparison manifest ↗</a><a href="legacy.html">Historical demo ↗</a></nav>
+    <nav aria-label="Release resources"><a href="comparison.json">Model manifest ↗</a><a href="postprocess.json">Postprocess manifest ↗</a><a href="legacy.html">Historical demo ↗</a></nav>
   </header>
   <main>
     <section class="intro" aria-labelledby="page-title">
-      <div><p class="eyebrow">3D part segmentation · controlled reruns</p><h1 id="page-title">Same inputs. Two model generations.</h1><p class="intro-copy">Explore all 15 original demo meshes and three characters. Rotate a pair, inspect the shared six-view condition, and judge the differences for yourself.</p></div>
+      <div><p class="eyebrow">3D part segmentation · controlled comparisons</p><h1 id="page-title">Models and cleanup, inspected side by side.</h1><p class="intro-copy">Explore all 15 original demo meshes and three characters. Switch between old/new reruns and the new model before/after geometry-only cleanup, with raw outputs always retained.</p></div>
       <div class="release-stamp"><span class="status-dot" aria-hidden="true"></span><span id="release-date">Comparison release</span></div>
     </section>
     <div id="manifest-status" class="notice" role="status" aria-live="polite">
@@ -25,6 +25,13 @@
       <button id="retry-manifest" type="button" class="button secondary" hidden>Retry manifest</button>
     </div>
     <noscript><div class="notice">Enable JavaScript to load the comparison manifest and interactive models. The <a href="legacy.html">historical demo</a> remains available.</div></noscript>
+    <div id="mode-switch" class="mode-switch" role="group" aria-label="Comparison mode" hidden>
+      <div><span class="mode-kicker">Comparison mode</span><strong id="mode-title">Old model vs new model</strong></div>
+      <div class="mode-buttons">
+        <button type="button" data-mode="models" aria-pressed="true">Old vs new</button>
+        <button type="button" data-mode="post" aria-pressed="false">Raw vs postprocessed</button>
+      </div>
+    </div>
     <div class="workspace" id="workspace" hidden>
       <aside class="sample-panel" aria-labelledby="sample-list-heading">
         <div class="sample-panel-heading"><h2 id="sample-list-heading">Samples</h2><span id="sample-count" class="count"></span></div>
@@ -49,21 +56,26 @@
         </div>
         <div class="viewer-grid">
           <article class="viewer-card" aria-labelledby="old-heading">
-            <div class="viewer-card-heading"><div><p class="model-label old-label">Old · rerun</p><h3 id="old-heading">Legacy 20-label pair</h3></div><span id="old-state" class="viewer-state">Waiting</span></div>
+            <div class="viewer-card-heading"><div><p id="old-label" class="model-label old-label">Old · rerun</p><h3 id="old-heading">Legacy 20-label pair</h3></div><span id="old-state" class="viewer-state">Waiting</span></div>
             <div id="old-viewer-host" class="viewer-host"></div>
-            <div class="viewer-card-footer"><p>DiT EMA 50,000 · 20-label VAE</p><a id="download-old" class="download-link" download>Download old GLB ↓</a></div>
+            <div class="viewer-card-footer"><p id="old-footer">DiT EMA 50,000 · 20-label VAE</p><a id="download-old" class="download-link" download>Download old GLB ↓</a></div>
           </article>
           <article class="viewer-card" aria-labelledby="new-heading">
-            <div class="viewer-card-heading"><div><p class="model-label new-label">New · rerun</p><h3 id="new-heading">Parts64 pair</h3></div><span id="new-state" class="viewer-state">Waiting</span></div>
+            <div class="viewer-card-heading"><div><p id="new-label" class="model-label new-label">New · rerun</p><h3 id="new-heading">Parts64 pair</h3></div><span id="new-state" class="viewer-state">Waiting</span></div>
             <div id="new-viewer-host" class="viewer-host"></div>
-            <div class="viewer-card-footer"><p>64-label VAE + matching DiT</p><a id="download-new" class="download-link" download>Download new GLB ↓</a></div>
+            <div class="viewer-card-footer"><p id="new-footer">64-label VAE + matching DiT</p><a id="download-new" class="download-link" download>Download new GLB ↓</a></div>
           </article>
         </div>
         <p class="viewer-help">Drag to orbit · scroll or pinch to zoom · right-drag or two fingers to pan. Both viewers use the same neutral gray background, lighting, and no added ground shadow.</p>
         <p id="selection-announcement" class="sr-only" role="status" aria-live="polite"></p>
         <section class="agreement-panel" aria-labelledby="agreement-heading">
           <div class="section-heading"><div><p class="eyebrow">Measured against the conditioning views</p><h3 id="agreement-heading">2D input agreement</h3></div><span class="tag">Not ground-truth evaluation</span></div>
-          <div class="table-scroll"><table><caption class="sr-only">Agreement with the 2D input labels. Changes are new minus old in percentage points.</caption><thead><tr><th scope="col">Measure</th><th scope="col">Old rerun</th><th scope="col">New rerun</th><th scope="col">Change (pp)</th></tr></thead><tbody><tr><th scope="row">Pixel agreement <span>(accuracy)</span></th><td id="old-accuracy">—</td><td id="new-accuracy">—</td><td id="delta-accuracy">—</td></tr><tr><th scope="row">Mean overlap <span>(mIoU)</span></th><td id="old-miou">—</td><td id="new-miou">—</td><td id="delta-miou">—</td></tr></tbody></table></div>
+          <div class="table-scroll"><table><caption id="metric-caption" class="sr-only">Agreement with the 2D input labels. Changes are new minus old in percentage points.</caption><thead><tr><th scope="col">Measure</th><th id="metric-old-heading" scope="col">Old rerun</th><th id="metric-new-heading" scope="col">New rerun</th><th scope="col">Change (pp)</th></tr></thead><tbody><tr><th scope="row">Pixel agreement <span>(accuracy)</span></th><td id="old-accuracy">—</td><td id="new-accuracy">—</td><td id="delta-accuracy">—</td></tr><tr><th scope="row">Mean overlap <span>(mIoU)</span></th><td id="old-miou">—</td><td id="new-miou">—</td><td id="delta-miou">—</td></tr></tbody></table></div>
+          <div id="postprocess-stats" class="postprocess-stats" hidden>
+            <div><span>Changed surface area</span><strong id="changed-area">—</strong></div>
+            <div><span>Label components</span><strong id="component-change">—</strong></div>
+            <div><span>Components removed</span><strong id="component-reduction">—</strong></div>
+          </div>
           <p id="metric-note" class="muted"></p><p class="muted">These scores measure consistency with the provided 2D labels, not independent 3D ground truth. Higher agreement does not guarantee better segmentation; a new-model result may also regress. Missing scores are shown as —.</p>
         </section>
         <section class="evidence-section" aria-labelledby="evidence-heading">
@@ -79,18 +91,19 @@
         <section class="protocol-panel" aria-labelledby="protocol-heading">
           <div class="section-heading"><div><p class="eyebrow">How to read this comparison</p><h3 id="protocol-heading">A shared protocol, with clear limits</h3></div></div>
           <dl class="protocol-grid">
-            <div><dt>Old checkpoint pair</dt><dd id="protocol-old"></dd></div>
-            <div><dt>New checkpoint pair</dt><dd id="protocol-new"></dd></div>
-            <div><dt>Sampling</dt><dd id="protocol-sampling"></dd></div>
-            <div><dt>Condition labels</dt><dd>Legacy condition IDs ≤ 19 are identical for both reruns. The old pair uses a 20-label VAE; the new pair uses a 64-label VAE.</dd></div>
+            <div><dt id="protocol-old-title">Old checkpoint pair</dt><dd id="protocol-old"></dd></div>
+            <div><dt id="protocol-new-title">New checkpoint pair</dt><dd id="protocol-new"></dd></div>
+            <div><dt id="protocol-sampling-title">Sampling</dt><dd id="protocol-sampling"></dd></div>
+            <div><dt id="protocol-label-title">Condition labels</dt><dd id="protocol-labels">Legacy condition IDs ≤ 19 are identical for both reruns. The old pair uses a 20-label VAE; the new pair uses a 64-label VAE.</dd></div>
           </dl>
           <p id="protocol-condition-note" class="muted"></p>
           <p class="muted">Original demos 1–14 use parsed legacy dataset conditions whose annotations may be incorrect. Character conditions use coarse part labels from an external 2D segmentation API (8 / 6 / 6 parts across the three characters). Neither is independent ground truth. All samples are retained, including regressions.</p>
-          <div class="archive-note"><p><strong>Historical exports are separate.</strong> The original demo GLBs have an unknown training checkpoint. The old side above is a controlled rerun using DiT EMA 50,000, not an archived prediction. Demo 0, the controller, uses the exact same geometry as its historical GLB.</p><div class="archive-links"><a id="download-archive" download hidden>Download this sample’s historical GLB ↓</a><a href="legacy.html">Browse the preserved historical demo ↗</a></div></div>
+          <div id="archive-note" class="archive-note"><p><strong>Historical exports are separate.</strong> The original demo GLBs have an unknown training checkpoint. The old side above is a controlled rerun using DiT EMA 50,000, not an archived prediction. Demo 0, the controller, uses the exact same geometry as its historical GLB.</p><div class="archive-links"><a id="download-archive" download hidden>Download this sample’s historical GLB ↓</a><a href="legacy.html">Browse the preserved historical demo ↗</a></div></div>
+          <div id="postprocess-note" class="archive-note" hidden><p><strong>Raw predictions remain the source artifact.</strong> Cleanup does not read GT or the 2D condition, does not match label IDs, and does not overwrite 3D labels with projected 2D labels. The single setting shown here was selected on these same 18 development examples, so its measured gain is not held-out evidence.</p><div class="archive-links"><a href="postprocess.json">Inspect the postprocess manifest ↗</a></div></div>
         </section>
       </section>
     </div>
   </main>
-  <footer class="site-footer"><span>Trellis SegPart</span><p>A qualitative comparison of model generations. Inspect the inputs, outputs, and limitations together.</p><a href="comparison.json">View manifest ↗</a></footer>
+  <footer class="site-footer"><span>Trellis SegPart</span><p>A qualitative comparison of model generations and geometry-only cleanup. Inspect the inputs, raw outputs, and limitations together.</p><a id="footer-manifest" href="comparison.json">View model manifest ↗</a></footer>
 </body>
 </html>

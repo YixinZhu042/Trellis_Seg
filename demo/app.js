@@ -8,7 +8,8 @@
   const BASE_URL = new URL(".", window.location.href);
   const $ = (id) => document.getElementById(id);
   const state = {
-    samples: [], filter: "all", selected: null, generation: 0,
+    samples: [], postById: new Map(), manifests: {}, mode: "models",
+    filter: "all", selected: null, generation: 0,
     slots: {}, library: null, leader: "old", rotationFrame: null,
     rotationTime: 0, lastInteraction: 0, dragging: false,
   };
@@ -60,9 +61,9 @@
     return fallback;
   }
 
-  function normalizeManifest(manifest) {
+  function normalizeManifest(manifest, filename = "comparison.json") {
     if (!manifest || !Array.isArray(manifest.samples) || !manifest.samples.length) {
-      throw new Error("comparison.json does not contain any samples yet.");
+      throw new Error(`${filename} does not contain any samples yet.`);
     }
     const seen = new Set();
     const samples = manifest.samples.map((sample, index) => {
@@ -77,7 +78,7 @@
       seen.add(id);
       return { ...sample, id, title: text(sample.title, `Sample ${id}`), index };
     });
-    return { samples, protocol: manifest.protocol || {}, release_date: manifest.release_date };
+    return { ...manifest, samples, protocol: manifest.protocol || {}, release_date: manifest.release_date };
   }
 
   function showManifestStatus(title, detail, isError = false) {
@@ -95,29 +96,44 @@
       $("retry-manifest").hidden = true;
       return;
     }
-    showManifestStatus("Loading the comparison manifest…", "Reading sample details and available assets.");
+    showManifestStatus("Loading the comparison manifests…", "Reading model reruns, postprocessed outputs, and available assets.");
     $("retry-manifest").disabled = true;
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 20000);
     try {
-      const response = await fetch(new URL("comparison.json", BASE_URL), { cache: "no-store", signal: controller.signal });
-      if (!response.ok) throw new Error(`comparison.json returned HTTP ${response.status}. The release manifest may still be uploading.`);
+      const [modelResponse, postResponse] = await Promise.all([
+        fetch(new URL("comparison.json", BASE_URL), { cache: "no-store", signal: controller.signal }),
+        fetch(new URL("postprocess.json", BASE_URL), { cache: "no-store", signal: controller.signal }),
+      ]);
+      if (!modelResponse.ok) throw new Error(`comparison.json returned HTTP ${modelResponse.status}. The release manifest may still be uploading.`);
+      if (!postResponse.ok) throw new Error(`postprocess.json returned HTTP ${postResponse.status}. The postprocessed assets may still be uploading.`);
       let manifest;
-      try { manifest = normalizeManifest(await response.json()); }
+      let postManifest;
+      try {
+        manifest = normalizeManifest(await modelResponse.json(), "comparison.json");
+        postManifest = normalizeManifest(await postResponse.json(), "postprocess.json");
+      }
       catch (error) {
-        if (error instanceof SyntaxError) throw new Error("comparison.json is not valid JSON. Please retry after the manifest is published.");
+        if (error instanceof SyntaxError) throw new Error("A comparison manifest is not valid JSON. Please retry after the release is fully published.");
         throw error;
       }
       state.samples = manifest.samples;
-      renderProtocol(manifest);
+      state.postById = new Map(postManifest.samples.map((sample) => [sample.id, sample]));
+      const missing = state.samples.filter((sample) => !state.postById.has(sample.id));
+      if (missing.length) throw new Error(`postprocess.json is missing ${missing.length} comparison sample(s).`);
+      state.manifests = { models: manifest, post: postManifest };
+      const params = new URLSearchParams(window.location.hash.slice(1));
+      state.mode = params.get("mode") === "post" ? "post" : "models";
+      renderProtocol();
       renderSampleList();
       $("workspace").hidden = false;
+      $("mode-switch").hidden = false;
       $("manifest-status").hidden = true;
-      const requested = new URLSearchParams(window.location.hash.slice(1)).get("sample");
+      const requested = params.get("sample");
       const first = state.samples.find((sample) => sample.id === requested) || state.samples[0];
       selectSample(first.id);
     } catch (error) {
-      const detail = error.name === "AbortError" ? "The manifest request timed out. Check your connection and retry." : `${error.message} Serve this demo over HTTP and keep comparison.json beside index.html.`;
+      const detail = error.name === "AbortError" ? "The manifest request timed out. Check your connection and retry." : `${error.message} Serve this demo over HTTP and keep comparison.json and postprocess.json beside index.html.`;
       showManifestStatus("The comparison manifest is unavailable", detail, true);
     } finally {
       window.clearTimeout(timeout);
@@ -125,16 +141,46 @@
     }
   }
 
-  function renderProtocol(manifest) {
+  function renderProtocol() {
+    const manifest = state.manifests.models;
+    const postManifest = state.manifests.post;
     const protocol = manifest.protocol;
+    const isPost = state.mode === "post";
     $("release-date").textContent = text(manifest.release_date, "Comparison release");
-    $("protocol-old").textContent = describe(protocol.old_model, "Legacy 20-label VAE + DiT EMA 50,000.");
-    $("protocol-new").textContent = describe(protocol.new_model, "Parts64 VAE + matching DiT checkpoint pair.");
-    const steps = describe(protocol.steps, "20");
-    const seed = describe(protocol.seed, "42");
-    $("protocol-sampling").textContent = `${steps} Euler steps · CFG 1 · seed ${seed} · no smoothing.`;
-    $("protocol-condition-note").textContent = describe(protocol.condition_note, "Each old/new pair shares the same six-view 2D condition.");
-    $("metric-note").textContent = describe(protocol.metric_note, "Agreement is computed against the shared 2D conditioning labels. Changes are new minus old in percentage points.");
+    if (isPost) {
+      const postProtocol = postManifest.protocol;
+      const settings = postManifest.settings || {};
+      $("mode-title").textContent = "New model: raw vs postprocessed";
+      $("protocol-old-title").textContent = "Raw source";
+      $("protocol-new-title").textContent = "Cleanup rule";
+      $("protocol-sampling-title").textContent = "Boundary support";
+      $("protocol-label-title").textContent = "Information used";
+      $("protocol-old").textContent = describe(postProtocol.input, "Released parts64 new-model raw face labels.");
+      $("protocol-new").textContent = describe(postProtocol.method, "Geometry-only connected-component cleanup.");
+      $("protocol-sampling").textContent = describe(postProtocol.component_weight, "Boundary support weighted by face area and normal agreement.");
+      $("protocol-labels").textContent = `No GT, 2D condition, or label matching is used. Global threshold: ${(Number(settings.component_area_fraction || 0) * 100).toFixed(2)}% surface area; boundary dominance: ${(Number(settings.component_dominance || 0) * 100).toFixed(0)}%.`;
+      $("protocol-condition-note").textContent = describe(postProtocol.selection_note, "One global setting is used for all examples.");
+      $("metric-note").textContent = `${describe(postProtocol.metric_note, "Agreement is measured against the shared 2D input labels.")} Changes are postprocessed minus raw in percentage points.`;
+      $("footer-manifest").href = "postprocess.json";
+      $("footer-manifest").textContent = "View postprocess manifest ↗";
+    } else {
+      $("mode-title").textContent = "Old model vs new model";
+      $("protocol-old-title").textContent = "Old checkpoint pair";
+      $("protocol-new-title").textContent = "New checkpoint pair";
+      $("protocol-sampling-title").textContent = "Sampling";
+      $("protocol-label-title").textContent = "Condition labels";
+      $("protocol-old").textContent = describe(protocol.old_model, "Legacy 20-label VAE + DiT EMA 50,000.");
+      $("protocol-new").textContent = describe(protocol.new_model, "Parts64 VAE + matching DiT checkpoint pair.");
+      const steps = describe(protocol.steps, "20");
+      const seed = describe(protocol.seed, "42");
+      $("protocol-sampling").textContent = `${steps} Euler steps · CFG 1 · seed ${seed} · no smoothing.`;
+      $("protocol-labels").textContent = "Legacy condition IDs ≤ 19 are identical for both reruns. The old pair uses a 20-label VAE; the new pair uses a 64-label VAE.";
+      $("protocol-condition-note").textContent = describe(protocol.condition_note, "Each old/new pair shares the same six-view 2D condition.");
+      $("metric-note").textContent = describe(protocol.metric_note, "Agreement is computed against the shared 2D conditioning labels. Changes are new minus old in percentage points.");
+      $("footer-manifest").href = "comparison.json";
+      $("footer-manifest").textContent = "View model manifest ↗";
+    }
+    document.querySelectorAll("[data-mode]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.mode === state.mode)));
     $("count-all").textContent = state.samples.length;
     $("count-original").textContent = state.samples.filter((sample) => sample.kind === "original_demo").length;
     $("count-characters").textContent = state.samples.filter((sample) => sample.kind === "character").length;
@@ -201,14 +247,48 @@
     if (visible[index + delta]) selectSample(visible[index + delta].id);
   }
 
+  function setMode(mode) {
+    if (!state.manifests.models || !["models", "post"].includes(mode) || mode === state.mode) return;
+    state.mode = mode;
+    renderProtocol();
+    if (state.selected) selectSample(state.selected.id);
+  }
+
   function ratio(value) {
     return typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= 1 ? value : null;
   }
 
+  function comparisonData(sample) {
+    if (state.mode === "post") {
+      const post = state.postById.get(sample.id);
+      return {
+        leftPath: post?.raw_glb,
+        rightPath: post?.post_glb,
+        leftMetrics: post?.raw,
+        rightMetrics: post?.post,
+        comparisonImage: post?.comparison_image,
+        post,
+        leftName: "raw",
+        rightName: "postprocessed",
+      };
+    }
+    return {
+      leftPath: sample.old_glb,
+      rightPath: sample.new_glb,
+      leftMetrics: sample.metrics?.old,
+      rightMetrics: sample.metrics?.new,
+      comparisonImage: sample.comparison_image,
+      post: null,
+      leftName: "old",
+      rightName: "new",
+    };
+  }
+
   function renderMetrics(sample) {
+    const data = comparisonData(sample);
     ["accuracy", "miou"].forEach((metric) => {
-      const oldValue = ratio(sample.metrics?.old?.[metric]);
-      const newValue = ratio(sample.metrics?.new?.[metric]);
+      const oldValue = ratio(data.leftMetrics?.[metric]);
+      const newValue = ratio(data.rightMetrics?.[metric]);
       $(`old-${metric}`).textContent = oldValue === null ? "—" : `${(oldValue * 100).toFixed(1)}%`;
       $(`new-${metric}`).textContent = newValue === null ? "—" : `${(newValue * 100).toFixed(1)}%`;
       const change = $(`delta-${metric}`);
@@ -218,9 +298,19 @@
       } else {
         const delta = Math.round((newValue - oldValue) * 1000) / 10;
         change.textContent = `${delta > 0 ? "+" : delta < 0 ? "−" : ""}${Math.abs(delta).toFixed(1)}`;
-        change.title = "New minus old, in percentage points";
+        change.title = `${data.rightName} minus ${data.leftName}, in percentage points`;
       }
     });
+    const post = data.post;
+    $("postprocess-stats").hidden = !post;
+    if (post) {
+      const changedArea = ratio(post.changed_area_fraction);
+      const before = Number.isInteger(post.components_before) ? post.components_before : null;
+      const after = Number.isInteger(post.components_after) ? post.components_after : null;
+      $("changed-area").textContent = changedArea === null ? "—" : `${(changedArea * 100).toFixed(3)}%`;
+      $("component-change").textContent = before === null || after === null ? "—" : `${before.toLocaleString("en-US")} → ${after.toLocaleString("en-US")}`;
+      $("component-reduction").textContent = before === null || after === null || before === 0 ? "—" : `${(((before - after) / before) * 100).toFixed(1)}%`;
+    }
   }
 
   function renderImage(hostId, linkId, path, alt) {
@@ -252,7 +342,8 @@
 
   function selectSample(id) {
     const sample = state.samples.find((item) => item.id === id);
-    if (!sample || sample === state.selected) { updateNavigation(); return; }
+    if (!sample) { updateNavigation(); return; }
+    const data = comparisonData(sample);
     state.generation += 1;
     disposeViewers();
     state.selected = sample;
@@ -261,16 +352,30 @@
     $("sample-title").textContent = sample.title;
     $("sample-kind").textContent = sample.kind === "character" ? "Character" : "Original demo";
     $("sample-faces").textContent = Number.isInteger(sample.faces) && sample.faces >= 0 ? `${sample.faces.toLocaleString("en-US")} faces` : "Face count not supplied";
-    $("selection-announcement").textContent = `${sample.title} selected. Loading the old and new reruns.`;
-    setLink("download-old", sample.old_glb);
-    setLink("download-new", sample.new_glb);
+    const isPost = state.mode === "post";
+    $("selection-announcement").textContent = `${sample.title} selected. Loading ${isPost ? "the raw and postprocessed outputs" : "the old and new reruns"}.`;
+    $("old-label").textContent = isPost ? "New · raw" : "Old · rerun";
+    $("old-heading").textContent = isPost ? "Parts64 raw output" : "Legacy 20-label pair";
+    $("old-footer").textContent = isPost ? "Unmodified released prediction" : "DiT EMA 50,000 · 20-label VAE";
+    $("download-old").textContent = isPost ? "Download raw GLB ↓" : "Download old GLB ↓";
+    $("new-label").textContent = isPost ? "New · cleaned" : "New · rerun";
+    $("new-heading").textContent = isPost ? "Geometry-only postprocess" : "Parts64 pair";
+    $("new-footer").textContent = isPost ? "One global component + boundary rule" : "64-label VAE + matching DiT";
+    $("download-new").textContent = isPost ? "Download postprocessed GLB ↓" : "Download new GLB ↓";
+    $("metric-old-heading").textContent = isPost ? "Raw" : "Old rerun";
+    $("metric-new-heading").textContent = isPost ? "Postprocessed" : "New rerun";
+    $("metric-caption").textContent = `Agreement with the 2D input labels. Changes are ${data.rightName} minus ${data.leftName} in percentage points.`;
+    setLink("download-old", data.leftPath);
+    setLink("download-new", data.rightPath);
     setLink("download-archive", sample.kind === "original_demo" ? sample.archive_glb : null);
+    $("archive-note").hidden = isPost;
+    $("postprocess-note").hidden = !isPost;
     renderMetrics(sample);
     $("condition-provenance").textContent = sample.kind === "character"
-      ? "External 2D API labels provide coarse part conditions (8 / 6 / 6 parts across the three characters). Both reruns receive the same labels. These are not ground-truth annotations."
-      : "Both reruns receive the same legacy six-view condition with IDs ≤ 19. Parsed annotations for original demos 1–14 may be incorrect; the reported metrics measure only 2D input agreement.";
-    renderImage("condition-image-host", "open-condition", sample.condition_image, `${sample.title}: six-view 2D segmentation condition shared by both models`);
-    renderImage("comparison-image-host", "open-comparison", sample.comparison_image, `${sample.title}: supplied static old/new comparison`);
+      ? `External 2D API labels provide coarse part conditions (8 / 6 / 6 parts across the three characters). ${isPost ? "They are used only for the displayed agreement metrics, not by cleanup." : "Both reruns receive the same labels."} These are not ground-truth annotations.`
+      : `${isPost ? "Cleanup does not read the legacy six-view condition; it is shown only for input-agreement metrics." : "Both reruns receive the same legacy six-view condition with IDs ≤ 19."} Parsed annotations for original demos 1–14 may be incorrect; the reported metrics measure only 2D input agreement.`;
+    renderImage("condition-image-host", "open-condition", sample.condition_image, `${sample.title}: six-view 2D segmentation condition`);
+    renderImage("comparison-image-host", "open-comparison", data.comparisonImage, `${sample.title}: supplied static ${isPost ? "raw/postprocessed" : "old/new"} comparison`);
     $("source-details").open = false;
     $("source-details").hidden = !assetURL(sample.source_image);
     $("source-image-host").replaceChildren();
@@ -279,10 +384,12 @@
     $("sample-notes").replaceChildren(...notes.map((note) => element("li", "", note)));
     $("sample-notes-panel").hidden = !notes.length;
     updateNavigation();
-    const hash = `#${new URLSearchParams({ sample: sample.id })}`;
+    const params = { sample: sample.id };
+    if (state.mode === "post") params.mode = "post";
+    const hash = `#${new URLSearchParams(params)}`;
     if (window.location.hash !== hash) window.history.replaceState(null, "", hash);
-    mountViewer("old", sample.old_glb, state.generation);
-    mountViewer("new", sample.new_glb, state.generation);
+    mountViewer("old", data.leftPath, state.generation);
+    mountViewer("new", data.rightPath, state.generation);
   }
 
   function ensureViewerLibrary() {
@@ -384,7 +491,7 @@
     const viewer = element("model-viewer");
     slot.viewer = viewer;
     const attributes = {
-      id: `${side}-viewer`, alt: `${state.selected.title}, ${side} model rerun. Drag to orbit; use arrow keys when focused.`,
+      id: `${side}-viewer`, alt: `${state.selected.title}, ${state.mode === "post" ? (side === "old" ? "raw new-model output" : "geometry-only postprocessed output") : `${side} model rerun`}. Drag to orbit; use arrow keys when focused.`,
       "camera-controls": "", "camera-orbit": DEFAULT_ORBIT, "camera-target": DEFAULT_TARGET,
       "field-of-view": DEFAULT_FOV, "environment-image": "neutral", "shadow-intensity": "0",
       exposure: "1", "tone-mapping": "neutral", "interaction-prompt": "none",
@@ -512,6 +619,9 @@
       if (visible.length && !visible.includes(state.selected)) selectSample(visible[0].id);
     });
   });
+  document.querySelectorAll("[data-mode]").forEach((button) => {
+    button.addEventListener("click", () => setMode(button.dataset.mode));
+  });
   $("previous-sample").addEventListener("click", () => moveSelection(-1));
   $("next-sample").addEventListener("click", () => moveSelection(1));
   $("retry-manifest").addEventListener("click", loadManifest);
@@ -528,7 +638,13 @@
   window.addEventListener("blur", () => { state.dragging = false; });
   document.addEventListener("visibilitychange", updateRotation);
   window.addEventListener("hashchange", () => {
-    const id = new URLSearchParams(window.location.hash.slice(1)).get("sample");
+    const params = new URLSearchParams(window.location.hash.slice(1));
+    const requestedMode = params.get("mode") === "post" ? "post" : "models";
+    if (requestedMode !== state.mode) {
+      state.mode = requestedMode;
+      renderProtocol();
+    }
+    const id = params.get("sample");
     const sample = state.samples.find((item) => item.id === id);
     if (!sample) return;
     if (state.filter !== "all" && sample.kind !== state.filter) {
