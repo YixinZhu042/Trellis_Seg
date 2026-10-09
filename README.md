@@ -40,17 +40,29 @@ Protocol: Gaussian start, **20 Euler steps, CFG=1 (no classifier-free guidance a
 
 Further reading: [VAE losses](docs/seg_vae_v2_losses_explained.md), [corrected parts64 data and splits](docs/seg_vae_v2_parts64.md), [VAE label-permutation continuation](docs/seg_vae_v2_parts64_permute.md), [frozen-VAE DiT training](docs/dit_vae_v2_parts64.md), [B + small-part methodology](docs/dit_b_smallparts.md), and [October 9 evaluation report](docs/dit_b_smallparts_test_20261009.md). Experiment notes describe their recorded environment; local runtime artifacts linked from those notes are not bundled with this release.
 
-## Demo Results
+## Interactive old / new comparison — 2026-10-09
 
-The existing interactive demo and images below are retained from the historical release; they are not the 128-object parts64 evaluation above.
+👉 [**Open the comparison: 15 original demo meshes + 3 characters**](https://yixinzhu042.github.io/Trellis_Seg/demo/index.html)
 
-👉 [**View Interactive Demo (Segmentation + 3D Mesh)**](https://yixinzhu042.github.io/Trellis_Seg/demo/index.html)
+The updated HTML provides side-by-side old/new GLBs, synchronized cameras, character filtering, shared input views, static comparisons, and downloads. Only the selected pair is loaded. The original GLBs and [historical page](demo/legacy.html) are preserved.
+
+Both sides are controlled **reruns**: legacy 20-label VAE + DiT EMA step 50,000 versus VAE v2 parts64 regular step 9,500 + B DiT EMA step 5,000. They use identical geometry-only voxel samples, six-view label pixels, and Gaussian noise (seed 42, 20 Euler steps, CFG=1), with each model's trained normalization. No label matching, smoothing, or mesh decimation is applied. These reruns are not a claim of exact reproduction of the archived July predictions.
+
+The following figures are **agreement with the supplied 2D conditions, not ground-truth segmentation accuracy**. The 15 original inputs retain legacy conditions; the three new character conditions were generated once per character by an external 2D segmentation API and shared between models.
+
+| Demo cohort / character | Old condition mIoU | New condition mIoU | Change |
+| --- | ---: | ---: | ---: |
+| 15 original demos, object mean | 93.53% | 92.53% | −1.00 pp |
+| Character 1 — seated monk | 45.72% | 65.15% | +19.43 pp |
+| Character 2 — armored bear | 45.05% | 60.33% | +15.28 pp |
+| Character 3 — fantasy warrior | 70.21% | 76.02% | +5.81 pp |
+
+The character results improve on this condition-agreement measure, but regressions are retained: original demo 08 drops 18.57 pp and demo 10 drops 7.99 pp. New-model character outputs also contain small extra-label fragments, so higher agreement does not establish uniformly cleaner segmentation. See the [demo protocol and limitations](docs/demo_comparison_20261009.md).
 
 <p align="center">
-  <img src="demo/0.png" width="45%">
-  <img src="demo/1_seg_views.png" width="45%">
-  <img src="demo/5_seg_views.png" width="45%">
-  <img src="demo/6_seg_views.png" width="45%">
+  <a href="https://yixinzhu042.github.io/Trellis_Seg/demo/#sample=character1"><img src="demo/comparison/character1/comparison.png" width="100%" alt="Seated monk: shared input condition, old model, new model"></a>
+  <a href="https://yixinzhu042.github.io/Trellis_Seg/demo/#sample=character2"><img src="demo/comparison/character2/comparison.png" width="49%" alt="Armored bear: input, old, new"></a>
+  <a href="https://yixinzhu042.github.io/Trellis_Seg/demo/#sample=character3"><img src="demo/comparison/character3/comparison.png" width="49%" alt="Fantasy warrior: input, old, new"></a>
 </p>
 
 ## News

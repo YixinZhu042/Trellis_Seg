@@ -1,120 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trellis SegPart - Demo Results</title>
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #1a1a2e;
-            color: #eee;
-            padding: 2rem;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 2rem;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .grid .header {
-            font-weight: bold;
-            font-size: 1.2rem;
-            text-align: center;
-            padding: 0.5rem;
-            background: #16213e;
-            border-radius: 8px;
-        }
-        .card {
-            background: #16213e;
-            border-radius: 8px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.5rem;
-        }
-        .card img {
-            width: 100%;
-            height: auto;
-            border-radius: 4px;
-        }
-        model-viewer {
-            width: 100%;
-            height: 400px;
-            border-radius: 4px;
-            --poster-color: transparent;
-        }
-    </style>
-    <script>
-        // Auto-detect base URL: works both on GitHub Pages and locally
-        const BASE = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('model-viewer').forEach(mv => {
-                const src = mv.getAttribute('data-src');
-                if (src) mv.setAttribute('src', BASE + src);
-            });
-        });
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101a2d">
+  <meta name="description" content="Compare controlled old and new Trellis SegPart reruns on the original demo meshes and three characters. Inspect the 3D outputs, shared 2D conditions, and input agreement.">
+  <title>Trellis SegPart · Model comparison</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
 </head>
 <body>
-    <h1>Trellis SegPart - Demo Results</h1>
-    <div class="grid">
-        <div class="header">Segmentation Views</div>
-        <div class="header">Interactive 3D Mesh</div>
-
-        <div class="card"><img src="0.png" alt="seg views"></div>
-        <div class="card"><model-viewer data-src="0.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
-
-        <div class="card"><img src="1_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer data-src="1.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
-
-        <div class="card"><img src="2_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer data-src="2.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
-
-        <div class="card"><img src="3_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer data-src="3.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
-
-        <div class="card"><img src="4_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer data-src="4.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
-
-        <div class="card"><img src="5_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer data-src="5.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
-
-        <div class="card"><img src="6_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer data-src="6.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
-
-        <div class="card"><img src="7_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer data-src="7.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
-
-        <div class="card"><img src="8_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer data-src="8.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
-
-        <div class="card"><img src="9_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer data-src="9.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
-
-        <div class="card"><img src="10_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer data-src="10.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
-
-        <div class="card"><img src="11_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer data-src="11.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
-
-        <div class="card"><img src="12_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer data-src="12.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
-
-        <div class="card"><img src="13_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer data-src="13.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
-
-        <div class="card"><img src="14_seg_views.png" alt="seg views"></div>
-        <div class="card"><model-viewer data-src="14.glb" camera-controls auto-rotate shadow-intensity="1"></model-viewer></div>
+  <a class="skip-link" href="#comparison">Skip to comparison</a>
+  <header class="site-header">
+    <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>Trellis <strong>SegPart</strong></span></div>
+    <nav aria-label="Release resources"><a href="comparison.json">Comparison manifest ↗</a><a href="legacy.html">Historical demo ↗</a></nav>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div><p class="eyebrow">3D part segmentation · controlled reruns</p><h1 id="page-title">Same inputs. Two model generations.</h1><p class="intro-copy">Explore all 15 original demo meshes and three characters. Rotate a pair, inspect the shared six-view condition, and judge the differences for yourself.</p></div>
+      <div class="release-stamp"><span class="status-dot" aria-hidden="true"></span><span id="release-date">Comparison release</span></div>
+    </section>
+    <div id="manifest-status" class="notice" role="status" aria-live="polite">
+      <div><strong id="manifest-status-title">Loading the comparison manifest…</strong><p id="manifest-status-detail">Sample details and available assets will appear here.</p><code id="serve-command" hidden>python -m http.server 8000</code></div>
+      <button id="retry-manifest" type="button" class="button secondary" hidden>Retry manifest</button>
     </div>
+    <noscript><div class="notice">Enable JavaScript to load the comparison manifest and interactive models. The <a href="legacy.html">historical demo</a> remains available.</div></noscript>
+    <div class="workspace" id="workspace" hidden>
+      <aside class="sample-panel" aria-labelledby="sample-list-heading">
+        <div class="sample-panel-heading"><h2 id="sample-list-heading">Samples</h2><span id="sample-count" class="count"></span></div>
+        <div class="filters" role="group" aria-label="Filter samples">
+          <button type="button" data-filter="all" aria-pressed="true">All <span id="count-all"></span></button>
+          <button type="button" data-filter="original_demo" aria-pressed="false">Original <span id="count-original"></span></button>
+          <button type="button" data-filter="character" aria-pressed="false">Characters <span id="count-characters"></span></button>
+        </div>
+        <p class="list-hint">Select a sample. Use ↑ / ↓ to browse.</p>
+        <div id="sample-list" class="sample-list" role="group" aria-label="Comparison samples"></div>
+        <p id="empty-filter" class="empty-filter" hidden>No samples in this group yet.</p>
+        <p class="sample-footer">Only the selected pair is loaded.<br>Large GLBs may take a moment.</p>
+      </aside>
+      <section id="comparison" class="comparison" aria-labelledby="sample-title" tabindex="-1">
+        <div class="selection-heading">
+          <div><p class="eyebrow"><span id="sample-kind"></span><span class="meta-divider" aria-hidden="true">/</span><span id="sample-position"></span></p><h2 id="sample-title"></h2><p id="sample-faces" class="muted"></p></div>
+          <div class="sample-navigation" role="group" aria-label="Browse filtered samples"><button type="button" id="previous-sample" class="icon-button" aria-label="Previous sample">←</button><button type="button" id="next-sample" class="icon-button" aria-label="Next sample">→</button></div>
+        </div>
+        <div class="viewer-toolbar">
+          <div class="viewer-options"><label class="toggle"><input type="checkbox" id="sync-cameras" checked><span>Sync cameras</span></label><label class="toggle"><input type="checkbox" id="auto-rotate"><span>Auto-rotate</span></label></div>
+          <button type="button" id="reset-camera" class="button secondary">Reset view</button>
+        </div>
+        <div class="viewer-grid">
+          <article class="viewer-card" aria-labelledby="old-heading">
+            <div class="viewer-card-heading"><div><p class="model-label old-label">Old · rerun</p><h3 id="old-heading">Legacy 20-label pair</h3></div><span id="old-state" class="viewer-state">Waiting</span></div>
+            <div id="old-viewer-host" class="viewer-host"></div>
+            <div class="viewer-card-footer"><p>DiT EMA 50,000 · 20-label VAE</p><a id="download-old" class="download-link" download>Download old GLB ↓</a></div>
+          </article>
+          <article class="viewer-card" aria-labelledby="new-heading">
+            <div class="viewer-card-heading"><div><p class="model-label new-label">New · rerun</p><h3 id="new-heading">Parts64 pair</h3></div><span id="new-state" class="viewer-state">Waiting</span></div>
+            <div id="new-viewer-host" class="viewer-host"></div>
+            <div class="viewer-card-footer"><p>64-label VAE + matching DiT</p><a id="download-new" class="download-link" download>Download new GLB ↓</a></div>
+          </article>
+        </div>
+        <p class="viewer-help">Drag to orbit · scroll or pinch to zoom · right-drag or two fingers to pan. Both viewers use the same neutral gray background, lighting, and no added ground shadow.</p>
+        <p id="selection-announcement" class="sr-only" role="status" aria-live="polite"></p>
+        <section class="agreement-panel" aria-labelledby="agreement-heading">
+          <div class="section-heading"><div><p class="eyebrow">Measured against the conditioning views</p><h3 id="agreement-heading">2D input agreement</h3></div><span class="tag">Not ground-truth evaluation</span></div>
+          <div class="table-scroll"><table><caption class="sr-only">Agreement with the 2D input labels. Changes are new minus old in percentage points.</caption><thead><tr><th scope="col">Measure</th><th scope="col">Old rerun</th><th scope="col">New rerun</th><th scope="col">Change (pp)</th></tr></thead><tbody><tr><th scope="row">Pixel agreement <span>(accuracy)</span></th><td id="old-accuracy">—</td><td id="new-accuracy">—</td><td id="delta-accuracy">—</td></tr><tr><th scope="row">Mean overlap <span>(mIoU)</span></th><td id="old-miou">—</td><td id="new-miou">—</td><td id="delta-miou">—</td></tr></tbody></table></div>
+          <p id="metric-note" class="muted"></p><p class="muted">These scores measure consistency with the provided 2D labels, not independent 3D ground truth. Higher agreement does not guarantee better segmentation; a new-model result may also regress. Missing scores are shown as —.</p>
+        </section>
+        <section class="evidence-section" aria-labelledby="evidence-heading">
+          <div class="section-heading"><div><p class="eyebrow">Inspect the evidence</p><h3 id="evidence-heading">Condition &amp; static comparison</h3></div></div>
+          <p id="condition-provenance" class="provenance-note"></p>
+          <div class="evidence-grid">
+            <figure class="image-card"><figcaption><h4>Shared input condition</h4><p>Six segmentation views supplied to both reruns.</p></figcaption><div id="condition-image-host" class="image-host"></div><a id="open-condition" class="image-open" target="_blank" rel="noopener">Open full-size condition ↗</a></figure>
+            <figure class="image-card"><figcaption><h4>Static comparison</h4><p>The comparison image supplied with this sample.</p></figcaption><div id="comparison-image-host" class="image-host"></div><a id="open-comparison" class="image-open" target="_blank" rel="noopener">Open full-size comparison ↗</a></figure>
+          </div>
+          <details id="source-details" class="source-details" hidden><summary>Source image <span class="muted">· reference only</span></summary><div id="source-image-host" class="image-host source-image-host"></div><a id="open-source" class="image-open" target="_blank" rel="noopener">Open source image ↗</a></details>
+          <div id="sample-notes-panel" class="sample-notes" hidden><h4>Sample notes</h4><ul id="sample-notes"></ul></div>
+        </section>
+        <section class="protocol-panel" aria-labelledby="protocol-heading">
+          <div class="section-heading"><div><p class="eyebrow">How to read this comparison</p><h3 id="protocol-heading">A shared protocol, with clear limits</h3></div></div>
+          <dl class="protocol-grid">
+            <div><dt>Old checkpoint pair</dt><dd id="protocol-old"></dd></div>
+            <div><dt>New checkpoint pair</dt><dd id="protocol-new"></dd></div>
+            <div><dt>Sampling</dt><dd id="protocol-sampling"></dd></div>
+            <div><dt>Condition labels</dt><dd>Legacy condition IDs ≤ 19 are identical for both reruns. The old pair uses a 20-label VAE; the new pair uses a 64-label VAE.</dd></div>
+          </dl>
+          <p id="protocol-condition-note" class="muted"></p>
+          <p class="muted">Original demos 1–14 use parsed legacy dataset conditions whose annotations may be incorrect. Character conditions use coarse part labels from an external 2D segmentation API (8 / 6 / 6 parts across the three characters). Neither is independent ground truth. All samples are retained, including regressions.</p>
+          <div class="archive-note"><p><strong>Historical exports are separate.</strong> The original demo GLBs have an unknown training checkpoint. The old side above is a controlled rerun using DiT EMA 50,000, not an archived prediction. Demo 0, the controller, uses the exact same geometry as its historical GLB.</p><div class="archive-links"><a id="download-archive" download hidden>Download this sample’s historical GLB ↓</a><a href="legacy.html">Browse the preserved historical demo ↗</a></div></div>
+        </section>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer"><span>Trellis SegPart</span><p>A qualitative comparison of model generations. Inspect the inputs, outputs, and limitations together.</p><a href="comparison.json">View manifest ↗</a></footer>
 </body>
 </html>

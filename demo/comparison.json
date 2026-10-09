@@ -1,0 +1,925 @@
+{
+  "release_date": "2026-10-09",
+  "created_at": "2026-10-09T17:30:22.677330+08:00",
+  "protocol": {
+    "old_model": "Legacy20 VAE encoder/decoder step1000 + DiT EMA0.9999 step50000",
+    "new_model": "VAE v2 parts64 regular9500 + B small-part DiT EMA5000",
+    "steps": 20,
+    "seed": 42,
+    "cfg": 1,
+    "postprocessing": false,
+    "condition_note": "Same geometry-only sparse grid, exact same six-view label pixels and Gaussian noise for both models. Old and new use their respective trained normalization. No labels inferred from the archived outputs.",
+    "metric_note": "Exact-ID agreement with shared 2D input labels, not independent GT accuracy. Historical conditions may be incorrect; character conditions are external API predictions. Improvements and regressions are all retained.",
+    "legacy_face_decode": "8NN inverse-distance centroid logits",
+    "new_face_decode": "learned geometry-aware four-point surface head",
+    "geometry_note": "Original face count/order kept. Only common bbox centering and scaling applied to exported web GLBs."
+  },
+  "samples": [
+    {
+      "id": "demo00",
+      "title": "Original demo 00 \u2014 game controller",
+      "kind": "original_demo",
+      "source_name": "gamebox.glb",
+      "old_glb": "comparison/demo00/old.glb",
+      "new_glb": "comparison/demo00/new.glb",
+      "archive_glb": "0.glb",
+      "condition_image": "comparison/demo00/inputcondition.png",
+      "comparison_image": "comparison/demo00/comparison.png",
+      "source_image": null,
+      "faces": 50000,
+      "metrics": {
+        "old": {
+          "accuracy": 0.9633927883150588,
+          "miou": 0.7560304407770482
+        },
+        "new": {
+          "accuracy": 0.96361487267775,
+          "miou": 0.7619823522780147
+        }
+      },
+      "shape_coverage": 0.9962564342536265,
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ],
+      "source_geometry_sha256": "0d63903a678e26da2329546a02acadcedfe34f0ee04317ff08b70cbc6cadbba7",
+      "same_noise_sha256": "d10a6c93363716b343724522ab03d9f4227dbb4ab72ec3bd2fba6c7b5773221a",
+      "assets": {
+        "old.glb": {
+          "bytes": 3000980,
+          "sha256": "4e123ac5ef5870f5aa1ba2175940bf0161a3a4fe9bc2feeb1d38e6c0023f012f"
+        },
+        "new.glb": {
+          "bytes": 3000980,
+          "sha256": "b888c74402f3502ea02fed70c2f485c1a9b8eec90e73fedd7cc0cd6edfc46588"
+        },
+        "inputcondition.png": {
+          "bytes": 23611,
+          "sha256": "d85e264b2bd5ba5bbbe3673aaec0d117fa2be7087d27a60f2b8545f4e103226b"
+        },
+        "comparison.png": {
+          "bytes": 32308,
+          "sha256": "547fb49faf0abb51368a4a8498d7b2b053ecef482381ab398def8ae326536201"
+        }
+      }
+    },
+    {
+      "id": "demo01",
+      "title": "Original demo 01",
+      "kind": "original_demo",
+      "source_name": "1.glb",
+      "old_glb": "comparison/demo01/old.glb",
+      "new_glb": "comparison/demo01/new.glb",
+      "archive_glb": "1.glb",
+      "condition_image": "comparison/demo01/inputcondition.png",
+      "comparison_image": "comparison/demo01/comparison.png",
+      "source_image": null,
+      "faces": 88,
+      "metrics": {
+        "old": {
+          "accuracy": 1.0,
+          "miou": 1.0
+        },
+        "new": {
+          "accuracy": 1.0,
+          "miou": 1.0
+        }
+      },
+      "shape_coverage": 1.0,
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ],
+      "source_geometry_sha256": "b2f76f879a367ba2ffb15bf1451bce2f742a6acf54d5e4b1bbe90afdf4d5d399",
+      "same_noise_sha256": "ee072cc5e974bf30604026204cd5c51fc23ed7d4b7e5ea02e3043074681f77a7",
+      "assets": {
+        "old.glb": {
+          "bytes": 6240,
+          "sha256": "2be6ef72e989f14de05e04594f26241f2cace2724e8df3ea63f9cedadf6956a1"
+        },
+        "new.glb": {
+          "bytes": 6240,
+          "sha256": "0fb5d2b9045b2aafdc17ee998d75ebd825e4bdc320f56aeaa190af1593b1bc7d"
+        },
+        "inputcondition.png": {
+          "bytes": 7886,
+          "sha256": "da5d7eb0b449fe5cd4f374e08bf2ee6dfc65aa697356c484546f0825ede948d4"
+        },
+        "comparison.png": {
+          "bytes": 9327,
+          "sha256": "b45e7e4427fba48bf8518404ee0835b5a56cccf2983be45372066bd7004b0eb4"
+        }
+      }
+    },
+    {
+      "id": "demo02",
+      "title": "Original demo 02",
+      "kind": "original_demo",
+      "source_name": "2.glb",
+      "old_glb": "comparison/demo02/old.glb",
+      "new_glb": "comparison/demo02/new.glb",
+      "archive_glb": "2.glb",
+      "condition_image": "comparison/demo02/inputcondition.png",
+      "comparison_image": "comparison/demo02/comparison.png",
+      "source_image": null,
+      "faces": 13470,
+      "metrics": {
+        "old": {
+          "accuracy": 0.994501093868424,
+          "miou": 0.8570074661041192
+        },
+        "new": {
+          "accuracy": 0.9940388202346845,
+          "miou": 0.8463711081777319
+        }
+      },
+      "shape_coverage": 0.9930379746835443,
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ],
+      "source_geometry_sha256": "f0cc7c98bff461fa8267c5cef97a2ed00fcdceb7d9e377eb4bd8eff7fe122976",
+      "same_noise_sha256": "89975de7019fdad6bac9449c7ccf7c74191b5e5e67b81882877b3efee3934166",
+      "assets": {
+        "old.glb": {
+          "bytes": 809176,
+          "sha256": "6a2e07dd4858cee4248590171866d96f4985f9c89d1948dbfab2b7adbc28bdd5"
+        },
+        "new.glb": {
+          "bytes": 809176,
+          "sha256": "0cfd8eb0a150f0741e65b9cb18578ac15bb49ac82d752b1b0dfae0e511bbd7ee"
+        },
+        "inputcondition.png": {
+          "bytes": 10649,
+          "sha256": "91821a4cecd9497e19e2cb67188b710cd6f332d98626a71b3a06a52a421749ac"
+        },
+        "comparison.png": {
+          "bytes": 13803,
+          "sha256": "91433e74227eab083ee0bd021520cf932d29ad1d1d0a5b25e4085669e3fca9c3"
+        }
+      }
+    },
+    {
+      "id": "demo03",
+      "title": "Original demo 03",
+      "kind": "original_demo",
+      "source_name": "3.glb",
+      "old_glb": "comparison/demo03/old.glb",
+      "new_glb": "comparison/demo03/new.glb",
+      "archive_glb": "3.glb",
+      "condition_image": "comparison/demo03/inputcondition.png",
+      "comparison_image": "comparison/demo03/comparison.png",
+      "source_image": null,
+      "faces": 21296,
+      "metrics": {
+        "old": {
+          "accuracy": 0.9856053180214651,
+          "miou": 0.8298877503714558
+        },
+        "new": {
+          "accuracy": 0.9880011145553969,
+          "miou": 0.8364830459827763
+        }
+      },
+      "shape_coverage": 0.9972055888223553,
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ],
+      "source_geometry_sha256": "9bca164afec957297c956cb1f926d6935b659216db98e7515bc10b4e41eb5b51",
+      "same_noise_sha256": "3795bb47a541d51f8e1a19cdc052b4e7819c8d4ccc3133136af020a6554d104d",
+      "assets": {
+        "old.glb": {
+          "bytes": 1278740,
+          "sha256": "8f83b775351fe6c71e65c084ae20a4bb14e87808f3f8f3e1b86303b4eb131176"
+        },
+        "new.glb": {
+          "bytes": 1278740,
+          "sha256": "04679bb75821837d16d551d756ac0cff3308471afa346dc8febc6ecb474c687c"
+        },
+        "inputcondition.png": {
+          "bytes": 15743,
+          "sha256": "9bed2f3fdbb6812f2cc0a2dbb265de49425caa04aa921a3af8b227ded9748748"
+        },
+        "comparison.png": {
+          "bytes": 22690,
+          "sha256": "d8911ae00539eba29e837544c82a9ed784b255f0862cab057613ec8a4aee35e3"
+        }
+      }
+    },
+    {
+      "id": "demo04",
+      "title": "Original demo 04",
+      "kind": "original_demo",
+      "source_name": "4.glb",
+      "old_glb": "comparison/demo04/old.glb",
+      "new_glb": "comparison/demo04/new.glb",
+      "archive_glb": "4.glb",
+      "condition_image": "comparison/demo04/inputcondition.png",
+      "comparison_image": "comparison/demo04/comparison.png",
+      "source_image": null,
+      "faces": 7991,
+      "metrics": {
+        "old": {
+          "accuracy": 0.9958180094531812,
+          "miou": 0.9480485529930694
+        },
+        "new": {
+          "accuracy": 0.9937942487544795,
+          "miou": 0.955276393943512
+        }
+      },
+      "shape_coverage": 0.983358547655068,
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ],
+      "source_geometry_sha256": "e8edcc99be54c689ffb6fccc4c9bdd8646879d605514aef7d8477400b500c185",
+      "same_noise_sha256": "e48b7cd7663a3704dac460687b0c31020e26525e86054837f585cf0d454722aa",
+      "assets": {
+        "old.glb": {
+          "bytes": 480432,
+          "sha256": "9c993a4576e0976f8f1841e5fd6f86ea0c5cc7fbb73b35659c759d52657832b8"
+        },
+        "new.glb": {
+          "bytes": 480432,
+          "sha256": "eff814defcb6519846eb0902e2adac49ff92a351b5eb3ba38ad5dd2534224592"
+        },
+        "inputcondition.png": {
+          "bytes": 18538,
+          "sha256": "98c73e44b4b5f0fc8b1d1bbab3a0d3d5529379beeeb72e80d04b6a1a99482e6d"
+        },
+        "comparison.png": {
+          "bytes": 24948,
+          "sha256": "088a779abb3c4df22b9d2a434de98d9a3170bb069ec5423bfa3a0fe8f5f6188f"
+        }
+      }
+    },
+    {
+      "id": "demo05",
+      "title": "Original demo 05",
+      "kind": "original_demo",
+      "source_name": "5.glb",
+      "old_glb": "comparison/demo05/old.glb",
+      "new_glb": "comparison/demo05/new.glb",
+      "archive_glb": "5.glb",
+      "condition_image": "comparison/demo05/inputcondition.png",
+      "comparison_image": "comparison/demo05/comparison.png",
+      "source_image": null,
+      "faces": 1277,
+      "metrics": {
+        "old": {
+          "accuracy": 0.9988161677659394,
+          "miou": 0.9988161677659394
+        },
+        "new": {
+          "accuracy": 0.9984591389969371,
+          "miou": 0.9984591389969371
+        }
+      },
+      "shape_coverage": 1.0,
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ],
+      "source_geometry_sha256": "810366c279c63f19bd4143cf56a41db584293df0c84f2a5bf4a626872f514256",
+      "same_noise_sha256": "2e7b5e16b66354931b6dbb37bc97fc1015636a331ed6eaeb27505586de9c286b",
+      "assets": {
+        "old.glb": {
+          "bytes": 77592,
+          "sha256": "4bf362e6855c379fb2929a60a5d39073e0bc2cdbd8e7a146a4bec2a20dc08802"
+        },
+        "new.glb": {
+          "bytes": 77588,
+          "sha256": "d6f1800af0301a2ef9bd6d09c9ed95669166c21935aa3ace621876271005219f"
+        },
+        "inputcondition.png": {
+          "bytes": 8907,
+          "sha256": "14ce5b44f40ac2455828b87b8641a64e2f9886160aa82acb4e8b2c0160959d6b"
+        },
+        "comparison.png": {
+          "bytes": 10343,
+          "sha256": "9abdfe9a1bb45ae2921db9261a12c4e4714a55633908f74c97294756ed2c9374"
+        }
+      }
+    },
+    {
+      "id": "demo06",
+      "title": "Original demo 06",
+      "kind": "original_demo",
+      "source_name": "6.glb",
+      "old_glb": "comparison/demo06/old.glb",
+      "new_glb": "comparison/demo06/new.glb",
+      "archive_glb": "6.glb",
+      "condition_image": "comparison/demo06/inputcondition.png",
+      "comparison_image": "comparison/demo06/comparison.png",
+      "source_image": null,
+      "faces": 16324,
+      "metrics": {
+        "old": {
+          "accuracy": 0.9918158129573443,
+          "miou": 0.9568935942137644
+        },
+        "new": {
+          "accuracy": 0.9951511690165983,
+          "miou": 0.9918389548272932
+        }
+      },
+      "shape_coverage": 0.9610532089961602,
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ],
+      "source_geometry_sha256": "3f5c7be3cee34de7500947b494f8d370d800c09ef4adefdb43f886d0cbbd521c",
+      "same_noise_sha256": "3d6361c4c41ecace0c2cdf8a481c9a8d1d42e471503d79f7bf699fef0eb45bca",
+      "assets": {
+        "old.glb": {
+          "bytes": 980416,
+          "sha256": "032490a60b4e153393d789f8a1f8b34baef2ff3559930b7987a0cdca2cc02251"
+        },
+        "new.glb": {
+          "bytes": 980416,
+          "sha256": "8cf880868b6ea257e10853cbb23a80a7b93808786467053ef834d1167bd5b380"
+        },
+        "inputcondition.png": {
+          "bytes": 12025,
+          "sha256": "49dab658c70dfddfed6e23c418dbe1fda044b06354d95d2d87691fac46e21f7c"
+        },
+        "comparison.png": {
+          "bytes": 16923,
+          "sha256": "c8d0a80f9306a411a8eb795a5597173f0e364ec745a0a06c41d2ef363f6770d1"
+        }
+      }
+    },
+    {
+      "id": "demo07",
+      "title": "Original demo 07",
+      "kind": "original_demo",
+      "source_name": "7.glb",
+      "old_glb": "comparison/demo07/old.glb",
+      "new_glb": "comparison/demo07/new.glb",
+      "archive_glb": "7.glb",
+      "condition_image": "comparison/demo07/inputcondition.png",
+      "comparison_image": "comparison/demo07/comparison.png",
+      "source_image": null,
+      "faces": 7481,
+      "metrics": {
+        "old": {
+          "accuracy": 0.9906212560736128,
+          "miou": 0.894421306626709
+        },
+        "new": {
+          "accuracy": 0.9976057918124556,
+          "miou": 0.9186651479941995
+        }
+      },
+      "shape_coverage": 0.9974608548455354,
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ],
+      "source_geometry_sha256": "b593a216c8d80a3de160b13e2daf962c049b45822923bf902bbc49577ae94725",
+      "same_noise_sha256": "8b395865f21e3ec6e535ca44103c9fbe343b2dda70a3e104b95105d96eed203b",
+      "assets": {
+        "old.glb": {
+          "bytes": 449832,
+          "sha256": "a7e5d9cc02188bb32ef04d6ebcf60c9c678696e50fd59a0b51fe7a84e9c91816"
+        },
+        "new.glb": {
+          "bytes": 449832,
+          "sha256": "f0ce8d7a08db3484aa303bd17ceeb440ff411f167a131567c4346365992b9cbf"
+        },
+        "inputcondition.png": {
+          "bytes": 14031,
+          "sha256": "d4869611424e6fe9518d0c342276f5d99434c184b86f3bb636632682d645da84"
+        },
+        "comparison.png": {
+          "bytes": 19907,
+          "sha256": "7937ce0af9b0181de73176f897f9f353a50ae2f53b2a3a1b8b7dd35437fb59c4"
+        }
+      }
+    },
+    {
+      "id": "demo08",
+      "title": "Original demo 08",
+      "kind": "original_demo",
+      "source_name": "8.glb",
+      "old_glb": "comparison/demo08/old.glb",
+      "new_glb": "comparison/demo08/new.glb",
+      "archive_glb": "8.glb",
+      "condition_image": "comparison/demo08/inputcondition.png",
+      "comparison_image": "comparison/demo08/comparison.png",
+      "source_image": null,
+      "faces": 35508,
+      "metrics": {
+        "old": {
+          "accuracy": 0.995482707888684,
+          "miou": 0.9548431217640462
+        },
+        "new": {
+          "accuracy": 0.9831395870891094,
+          "miou": 0.7691715143926359
+        }
+      },
+      "shape_coverage": 0.9951534733441034,
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ],
+      "source_geometry_sha256": "2e7aba00c6490e5b57a5206ac1bfee481123cdcda366706c5e8fc28aebc735be",
+      "same_noise_sha256": "3aaa6d3b2a770520241002259ef144471e1b90877d4940b2033193621d94e221",
+      "assets": {
+        "old.glb": {
+          "bytes": 2131464,
+          "sha256": "3387315172626de35414e35d6a2ca8d1855b00be4976a673451fb6653537d505"
+        },
+        "new.glb": {
+          "bytes": 2131464,
+          "sha256": "eba78ce3c88abe848a39f90aac74c1095f3a16068ad710d1e66bd3ee5e00c878"
+        },
+        "inputcondition.png": {
+          "bytes": 15486,
+          "sha256": "df0400c11735ba65dc9ed64f4def549e62be508641154ab37574562a5c3e7b27"
+        },
+        "comparison.png": {
+          "bytes": 21161,
+          "sha256": "99b983a47c3412dc6864edae1440f300484a08f946d922deb4bfc1fbb3a1eb10"
+        }
+      }
+    },
+    {
+      "id": "demo09",
+      "title": "Original demo 09",
+      "kind": "original_demo",
+      "source_name": "9.glb",
+      "old_glb": "comparison/demo09/old.glb",
+      "new_glb": "comparison/demo09/new.glb",
+      "archive_glb": "9.glb",
+      "condition_image": "comparison/demo09/inputcondition.png",
+      "comparison_image": "comparison/demo09/comparison.png",
+      "source_image": null,
+      "faces": 2360,
+      "metrics": {
+        "old": {
+          "accuracy": 0.989052312747061,
+          "miou": 0.9053175564580224
+        },
+        "new": {
+          "accuracy": 0.995880178653935,
+          "miou": 0.9067381513284541
+        }
+      },
+      "shape_coverage": 1.0,
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ],
+      "source_geometry_sha256": "68a5d77c9b4b7b9fce26d3dffd0264ab9cc782504ad0935d0fe793dc89065f49",
+      "same_noise_sha256": "4c7886ffcdc5e7cde4bf9b10aabe52773685563d8a95bdb4f60f18d4cc06e97e",
+      "assets": {
+        "old.glb": {
+          "bytes": 142572,
+          "sha256": "8ab970046f5aace5ac3ad9ba4a6c6c6ff1579fcfcf08dec504ce7a7e5bd19567"
+        },
+        "new.glb": {
+          "bytes": 142572,
+          "sha256": "9de4d33a772a23cae01f5db56b8ce235bed857f0313015f15e19544e88ae8e53"
+        },
+        "inputcondition.png": {
+          "bytes": 10133,
+          "sha256": "8cf6e2c9af7d0fa41bbf685c761c34f34d12a44d273290a4f7b2d25f4e5165a9"
+        },
+        "comparison.png": {
+          "bytes": 12662,
+          "sha256": "9b80bdface3c959267e650d444469dedd59659e5fe77d792e16bacc0d32da9bc"
+        }
+      }
+    },
+    {
+      "id": "demo10",
+      "title": "Original demo 10",
+      "kind": "original_demo",
+      "source_name": "10.glb",
+      "old_glb": "comparison/demo10/old.glb",
+      "new_glb": "comparison/demo10/new.glb",
+      "archive_glb": "10.glb",
+      "condition_image": "comparison/demo10/inputcondition.png",
+      "comparison_image": "comparison/demo10/comparison.png",
+      "source_image": null,
+      "faces": 29939,
+      "metrics": {
+        "old": {
+          "accuracy": 0.9991352022344057,
+          "miou": 0.9981002359115809
+        },
+        "new": {
+          "accuracy": 0.9869783800558601,
+          "miou": 0.9181687793208569
+        }
+      },
+      "shape_coverage": 0.9962168978562421,
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ],
+      "source_geometry_sha256": "e816e03bd5de30b451fd97eb7d26c7011660daa9c4ac4cb5ce6baf2c8b0938d3",
+      "same_noise_sha256": "2203068a5d9691cf4be9767fd810dc34d550da8fbfa745b31755aef55e13d617",
+      "assets": {
+        "old.glb": {
+          "bytes": 1797320,
+          "sha256": "e1130d0573387a2147ea9214f84dded7bf781731aea4290192ce6252aef9e5bc"
+        },
+        "new.glb": {
+          "bytes": 1797320,
+          "sha256": "abaae8ed50912beb73b7aa3af610501a3a07dfcc165f829b358b10f0a7996c2d"
+        },
+        "inputcondition.png": {
+          "bytes": 46139,
+          "sha256": "e979636d39d22a49780dcda2721b24107f945bde72d3ddc28c0d2a18ff38ddd2"
+        },
+        "comparison.png": {
+          "bytes": 58412,
+          "sha256": "bfd60dbe5a97e7bbfdab1b5721303b1c51b4fbcac26177b5d0e9f49d815bd0e0"
+        }
+      }
+    },
+    {
+      "id": "demo11",
+      "title": "Original demo 11",
+      "kind": "original_demo",
+      "source_name": "11.glb",
+      "old_glb": "comparison/demo11/old.glb",
+      "new_glb": "comparison/demo11/new.glb",
+      "archive_glb": "11.glb",
+      "condition_image": "comparison/demo11/inputcondition.png",
+      "comparison_image": "comparison/demo11/comparison.png",
+      "source_image": null,
+      "faces": 3280,
+      "metrics": {
+        "old": {
+          "accuracy": 0.9953344261704465,
+          "miou": 0.9953344261704465
+        },
+        "new": {
+          "accuracy": 1.0,
+          "miou": 1.0
+        }
+      },
+      "shape_coverage": 0.9938047425763725,
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ],
+      "source_geometry_sha256": "0d4537591e2f62fe11e84727e00c4fc1aa9d38aa1fd9d906e07b667d343e55c1",
+      "same_noise_sha256": "fb9769dd38835d60df94cdbec097f53b15db6f3a1ce14ba0f2f8974123037929",
+      "assets": {
+        "old.glb": {
+          "bytes": 197772,
+          "sha256": "4b339c3d3fc8d8e7a39a507055014069bda97d2a9f8264ea81500c8341da9a3b"
+        },
+        "new.glb": {
+          "bytes": 197768,
+          "sha256": "765b201ab203d8d40d84496bc867535bc2b251a9b7c803d1887d4507b972162f"
+        },
+        "inputcondition.png": {
+          "bytes": 13800,
+          "sha256": "c08a5570b422049c65f0cacd92c10ed0b21862ae89c8884d24715d598503b455"
+        },
+        "comparison.png": {
+          "bytes": 18481,
+          "sha256": "b6c7d4941817039a86916b17ddc9372e1a9d1e0e8e1626a4b2bd766261b1df54"
+        }
+      }
+    },
+    {
+      "id": "demo12",
+      "title": "Original demo 12",
+      "kind": "original_demo",
+      "source_name": "12.glb",
+      "old_glb": "comparison/demo12/old.glb",
+      "new_glb": "comparison/demo12/new.glb",
+      "archive_glb": "12.glb",
+      "condition_image": "comparison/demo12/inputcondition.png",
+      "comparison_image": "comparison/demo12/comparison.png",
+      "source_image": null,
+      "faces": 3320,
+      "metrics": {
+        "old": {
+          "accuracy": 0.9819055316091954,
+          "miou": 0.9624585506396391
+        },
+        "new": {
+          "accuracy": 0.9942528735632183,
+          "miou": 0.9894976586145828
+        }
+      },
+      "shape_coverage": 1.0,
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ],
+      "source_geometry_sha256": "40ea9669e7bb00a0a446183d1239a95a5c1d3ab6fd4e02dffaf83ab75b28d790",
+      "same_noise_sha256": "967dd10566c8fe5d409d1b11363f2141671e96a69df7dceda9f47d01d6a6ce5c",
+      "assets": {
+        "old.glb": {
+          "bytes": 200172,
+          "sha256": "efa4901ff793c19012973f72aef31ab68f4c92ca5d2414b05fc6fdf64ce6928e"
+        },
+        "new.glb": {
+          "bytes": 200172,
+          "sha256": "09868af2c4f4f649e54bf430a96c01f6d6b395b2eb2be89ad0f5b3e7a50c84b7"
+        },
+        "inputcondition.png": {
+          "bytes": 11914,
+          "sha256": "6975154be929521197507f53fe101e830dd462fd5ba44f593d6a74f48c621410"
+        },
+        "comparison.png": {
+          "bytes": 16674,
+          "sha256": "488b0f2660c444a85423ae3a553ed8b74c8048b3486352024c3dc698b007e93e"
+        }
+      }
+    },
+    {
+      "id": "demo13",
+      "title": "Original demo 13",
+      "kind": "original_demo",
+      "source_name": "13.glb",
+      "old_glb": "comparison/demo13/old.glb",
+      "new_glb": "comparison/demo13/new.glb",
+      "archive_glb": "13.glb",
+      "condition_image": "comparison/demo13/inputcondition.png",
+      "comparison_image": "comparison/demo13/comparison.png",
+      "source_image": null,
+      "faces": 1072,
+      "metrics": {
+        "old": {
+          "accuracy": 0.9999854720846105,
+          "miou": 0.9999854720846105
+        },
+        "new": {
+          "accuracy": 1.0,
+          "miou": 1.0
+        }
+      },
+      "shape_coverage": 0.984,
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ],
+      "source_geometry_sha256": "e4a77da8c22e908cc7e2bf4816cde24de017302783b58f108aab7996ad1c4c18",
+      "same_noise_sha256": "570b9eceef3091178a77b22a226737506bf2cb0024fcca2f05527fd82a998475",
+      "assets": {
+        "old.glb": {
+          "bytes": 65292,
+          "sha256": "9dd172a0a95864c7466c433ace7f92413fb8d1ef771fa5aa9f80c5fd83c8d80b"
+        },
+        "new.glb": {
+          "bytes": 65292,
+          "sha256": "ed10295298d2eb3c54077970f074d72685386da4c65e9780403c36bf8f1d530e"
+        },
+        "inputcondition.png": {
+          "bytes": 8677,
+          "sha256": "dfd0977f90c5c132e01f23f60cb0b2193ba3483292e92e9cc9e2ca0b43126f6c"
+        },
+        "comparison.png": {
+          "bytes": 11128,
+          "sha256": "fdee837463a6d96d067cea7fb6fd63ed93957e0d89e65af9255a612d0859a58e"
+        }
+      }
+    },
+    {
+      "id": "demo14",
+      "title": "Original demo 14",
+      "kind": "original_demo",
+      "source_name": "14.glb",
+      "old_glb": "comparison/demo14/old.glb",
+      "new_glb": "comparison/demo14/new.glb",
+      "archive_glb": "14.glb",
+      "condition_image": "comparison/demo14/inputcondition.png",
+      "comparison_image": "comparison/demo14/comparison.png",
+      "source_image": null,
+      "faces": 992,
+      "metrics": {
+        "old": {
+          "accuracy": 0.989437921132687,
+          "miou": 0.9728978450349572
+        },
+        "new": {
+          "accuracy": 0.9939086799533733,
+          "miou": 0.9871570777113954
+        }
+      },
+      "shape_coverage": 0.9947460595446584,
+      "notes": [
+        "Historical geometry and input views reused; no GT accuracy claimed.",
+        "Legacy 20-channel conditions retained for a paired model comparison."
+      ],
+      "source_geometry_sha256": "d2f0328584f4cd5a63096c86946f02ff92305462885c6873948a2d0459f670b5",
+      "same_noise_sha256": "3d20b1dc2789068c9949fad743a30e5193aea253fa07febd4b1f1d3b43005626",
+      "assets": {
+        "old.glb": {
+          "bytes": 60488,
+          "sha256": "e0c4a4595f0c910e631b12ecd15b7c0bd7ea37cc9a53e72746a83f3a1a97ad0f"
+        },
+        "new.glb": {
+          "bytes": 60488,
+          "sha256": "142f24104ae8979701287417c818f8b634b597a8efe633905d64adef3a09e4ca"
+        },
+        "inputcondition.png": {
+          "bytes": 16558,
+          "sha256": "28fc5a9aa8beed9450b82e6083d4ba0bee8219588461c06656d8ad83b277b949"
+        },
+        "comparison.png": {
+          "bytes": 22793,
+          "sha256": "057cfe2779f9525822b071324e5f0360efd5800b435d073450eb5470dd5207e4"
+        }
+      }
+    },
+    {
+      "id": "character1",
+      "title": "Character 1 \u2014 seated monk",
+      "kind": "character",
+      "source_name": "5d2730529f18ae35ca26bd320a0e0f14_moved.glb",
+      "old_glb": "comparison/character1/old.glb",
+      "new_glb": "comparison/character1/new.glb",
+      "archive_glb": null,
+      "condition_image": "comparison/character1/inputcondition.png",
+      "comparison_image": "comparison/character1/comparison.png",
+      "source_image": "comparison/character1/source.png",
+      "faces": 490563,
+      "metrics": {
+        "old": {
+          "accuracy": 0.8507450810264034,
+          "miou": 0.45718806380146315
+        },
+        "new": {
+          "accuracy": 0.8896227124633618,
+          "miou": 0.6514860902907911
+        }
+      },
+      "shape_coverage": 0.9971219256933542,
+      "notes": [
+        "External2D API conditions shared by both models; no ground-truth segmentation.",
+        "Original static mesh kept at full face count; no decimation."
+      ],
+      "source_geometry_sha256": "989149dcc1a8d8067b111b15ca6e53aa5b208bd54708a0160d2ef7af2ecf0f58",
+      "same_noise_sha256": "7de67e56126eb9375c27d6bd8dae7f5c6b9b266d829726787f73ffbe51e70d7e",
+      "assets": {
+        "old.glb": {
+          "bytes": 29434788,
+          "sha256": "81e67df8c55bd84034f396bc521510e5fba0d24083dea3393729896a773df9c7"
+        },
+        "new.glb": {
+          "bytes": 29434788,
+          "sha256": "b282f795d184286d34384671eade0b52c1fbeca06769335736648e5221811c1d"
+        },
+        "inputcondition.png": {
+          "bytes": 51575,
+          "sha256": "67a0a9ce445d63049a167119b1347326e19006e032a731f4e0714c473348d47c"
+        },
+        "comparison.png": {
+          "bytes": 68696,
+          "sha256": "35f03e09059d94810d84a175eab2d6c36001e14b175f1585474b5cb9b2120374"
+        }
+      }
+    },
+    {
+      "id": "character2",
+      "title": "Character 2 \u2014 armored bear",
+      "kind": "character",
+      "source_name": "after_moved (1).glb",
+      "old_glb": "comparison/character2/old.glb",
+      "new_glb": "comparison/character2/new.glb",
+      "archive_glb": null,
+      "condition_image": "comparison/character2/inputcondition.png",
+      "comparison_image": "comparison/character2/comparison.png",
+      "source_image": "comparison/character2/source.png",
+      "faces": 500000,
+      "metrics": {
+        "old": {
+          "accuracy": 0.8582356049831744,
+          "miou": 0.4504966421630053
+        },
+        "new": {
+          "accuracy": 0.8800000777163819,
+          "miou": 0.6032782238162869
+        }
+      },
+      "shape_coverage": 0.9976608187134502,
+      "notes": [
+        "External2D API conditions shared by both models; no ground-truth segmentation.",
+        "Original static mesh kept at full face count; no decimation."
+      ],
+      "source_geometry_sha256": "d660fd58d94706c9c70463dc745bd998c4ab625e04c62f45d0ef51fb171495f0",
+      "same_noise_sha256": "f8732ad0f6f91b99b1b044b1ee0f69cee156f0b6fa045c289d320e558f24f686",
+      "assets": {
+        "old.glb": {
+          "bytes": 30001008,
+          "sha256": "4ba4a4a3ccb2bfd99c1c382691e51f9807bd57ca3bdf95e7eda98e2c406441ac"
+        },
+        "new.glb": {
+          "bytes": 30001008,
+          "sha256": "fdbdaaa4eaac355a2ecb7763f440761b2f7af5573e6885e74d52460b602083e7"
+        },
+        "inputcondition.png": {
+          "bytes": 43779,
+          "sha256": "22ace2b6f456e841a3aa221c10ae05f0db180bc91fd74b8352e435dc58b2d42c"
+        },
+        "comparison.png": {
+          "bytes": 55923,
+          "sha256": "6fb7d6c4eca14919d39f5f623f76091bc276ac92d56aa6d785ebc555dc336845"
+        }
+      }
+    },
+    {
+      "id": "character3",
+      "title": "Character 3 \u2014 fantasy warrior",
+      "kind": "character",
+      "source_name": "after_moved (2).glb",
+      "old_glb": "comparison/character3/old.glb",
+      "new_glb": "comparison/character3/new.glb",
+      "archive_glb": null,
+      "condition_image": "comparison/character3/inputcondition.png",
+      "comparison_image": "comparison/character3/comparison.png",
+      "source_image": "comparison/character3/source.png",
+      "faces": 500000,
+      "metrics": {
+        "old": {
+          "accuracy": 0.8662175527182907,
+          "miou": 0.7020745002913479
+        },
+        "new": {
+          "accuracy": 0.9015461381336011,
+          "miou": 0.7602036402689442
+        }
+      },
+      "shape_coverage": 0.9995715509854327,
+      "notes": [
+        "External2D API conditions shared by both models; no ground-truth segmentation.",
+        "Original static mesh kept at full face count; no decimation."
+      ],
+      "source_geometry_sha256": "8f41d5a50f11ad0d1e6f6b8b001b4515c82c07d1045df5ae151961cb24eafff7",
+      "same_noise_sha256": "33e23a76a29e47fb5021bf8d5c1f18552f3ab3a3dabe8155a1ab72f12ad86ba6",
+      "assets": {
+        "old.glb": {
+          "bytes": 30000996,
+          "sha256": "721eb3b27067fe6776d88181a61274ddbb5cf1f8a7df1e95082f60910675350d"
+        },
+        "new.glb": {
+          "bytes": 30000996,
+          "sha256": "7bc05331e61c493e21d5c226e466808c1a93e03e27109a7cfb187967e2d01d94"
+        },
+        "inputcondition.png": {
+          "bytes": 40853,
+          "sha256": "5b3ed13c7a6511221ae97f9c1a4a03aa40621834a4d87a830e279da9ca0e8ea4"
+        },
+        "comparison.png": {
+          "bytes": 54365,
+          "sha256": "0aee564ed6db9cc5cac5f8eb55832bd0bc0e54ae86c8541cffaf18a682157a16"
+        }
+      }
+    }
+  ],
+  "summary": {
+    "original_demo": {
+      "count": 15,
+      "mean_condition_agreement": {
+        "old": {
+          "accuracy": 0.9913936013548077,
+          "miou": 0.9353361657943605
+        },
+        "new": {
+          "accuracy": 0.9923216570242532,
+          "miou": 0.925320621571226
+        }
+      },
+      "improved_miou": 10,
+      "regressed_miou": 4
+    },
+    "character": {
+      "count": 3,
+      "mean_condition_agreement": {
+        "old": {
+          "accuracy": 0.8583994129092896,
+          "miou": 0.5365864020852721
+        },
+        "new": {
+          "accuracy": 0.8903896427711149,
+          "miou": 0.6716559847920074
+        }
+      },
+      "improved_miou": 3,
+      "regressed_miou": 0
+    }
+  },
+  "archived_outputs_preserved": true,
+  "model_hashes": {
+    "legacy_config": "1bd9aabbebb7d26e64ae72e60db59cc4e7da2c36d9f159056f3e9da9414ca21d",
+    "legacy_vae_config": "89b51fe46c0ba8b3fbd3b12cd572b9b15526e9b897f413de18a1372defe693fc",
+    "legacy_encoder": "1dac9efb71a94234a98b17f33e45b47620210cdd6d233be02fbd37edd8bbf2d9",
+    "legacy_decoder": "c35bdd67a08da450c34cc72429135bfefce5c015167f5ec16e47fb426458819b",
+    "legacy_dit": "ee4d3bce83bce69992dec70a3b89282e44d9031a0346f5e3f4f3ca6d61f64922",
+    "new_vae": "0a6172b072feecc35c8d4c957c0b90eb5874f1fd5098c86bad9efdf3bcfc3fb3",
+    "new_dit": "e6043125d32a64f3e4223ac224a34f658a9e7dd6901ed446c1b1758a688f7e76"
+  }
+}

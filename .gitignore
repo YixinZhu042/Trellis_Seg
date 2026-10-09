@@ -97,3 +97,5 @@ releases/
 *.jsonl
 !docs/assets/*.png
 !trellis_seg_pipeline.png
+!demo/comparison/**/*.glb
+!demo/comparison/**/*.png
